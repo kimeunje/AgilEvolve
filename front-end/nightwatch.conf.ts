@@ -33,7 +33,8 @@ module.exports = {
   globals_path: 'nightwatch/globals.js',
 
   vite_dev_server: {
-    start_vite: false
+    start_vite: true,
+    port: 3000
   },
 
   webdriver: {},
@@ -60,7 +61,7 @@ module.exports = {
 
       webdriver: {
         start_process: true,
-        server_path: ''
+        server_path: '',
       }
     },
 
@@ -145,7 +146,7 @@ module.exports = {
         server_path: '',
         cli_args: [
           // --verbose
-        ]
+        ],
       }
     }
   }
