@@ -7,17 +7,18 @@
           <div class="tagline">Open source task management tool</div>
         </div>
 
-        <form>
+        <form @submit.prevent="submitForm">
+          <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
           <div class="form-group form-floating mb-3">
-            <input type="text" class="form-control" id="username" placeholder="username">
+            <input type="text" class="form-control" id="username" placeholder="username" v-model="form.username">
             <label for="username">Username</label>
           </div>
           <div class="form-group form-floating mb-3">
-            <input type="email" class="form-control" id="emailAddress" placeholder="email">
+            <input type="email" class="form-control" id="emailAddress" placeholder="email" v-model="form.emailAddress">
             <label for="emailAddress">email</label>
           </div>
           <div class="form-group form-floating mb-3">
-            <input type="password" class="form-control" id="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" placeholder="Password" v-model="form.password">
             <label for="password">Password</label>
           </div>
 
@@ -46,6 +47,33 @@
     </footer>
   </div>
 </template>
+
+<script lang="ts">
+import registrationService from '@/services/registration'
+
+export default {
+  name: 'RegisterPage',
+  data() {
+    return {
+      form: {
+        username: '',
+        emailAddress: '',
+        password: ''
+      },
+      errorMessage: '',
+    }
+  },
+  methods: {
+    submitForm() {
+      registrationService.register(this.form).then(() => {
+        this.$router.push({ name: 'LoginPage' })
+      }).catch((error: { message: any; }) => {
+        this.errorMessage = 'Failed to register user. Reason: ' + (error.message ? error.message : 'Unknown') + '.'
+      })
+    }
+  }
+}
+</script>
 
 
 <style lang="scss" scoped>
