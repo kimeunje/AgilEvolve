@@ -35,3 +35,8 @@ build/
 
 ### backend properties ###
 application-dev.properties
+
+### Application specific ###
+application-dev.properties
+src/main/resources/static/
+src/main/resources/templates/index.html
