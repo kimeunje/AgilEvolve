@@ -8,7 +8,7 @@
         </div>
 
         <form @submit.prevent="submitForm">
-          <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
+          <div v-if="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
           <div class="form-group form-floating mb-3">
             <input type="text" class="form-control" id="username" placeholder="username" v-model="form.username">
             <label for="username">Username</label>

@@ -110,7 +110,7 @@ describe('RegisterPage', () => {
   })
 
   it('기존 사용자면 회원가입에 실패해야 합니다.', async () => {
-    // expect.assertions(2)
+    expect.assertions(3)
 
     wrapper.setData({
       form: {
@@ -120,11 +120,11 @@ describe('RegisterPage', () => {
       }
     })
 
-    expect(wrapper.find('.failed').isVisible()).toBe(false)
+    expect(wrapper.find('.failed').exists()).toBe(false)
     wrapper.vm.submitForm()
     expect(registerSpy).toBeCalled()
     await flushPromises()
-    expect(wrapper.find('.failed').isVisible()).toBe(true)
+    expect(wrapper.find('.failed').exists()).toBe(true)
   })
 
   it('이메일 주소가 유효하지 않을 경우 회원가입을 할 수 없어야 합니다.', () => {
