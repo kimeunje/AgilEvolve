@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * JSON 문자열로 변환하는 유틸리티 메서드를 제공합니다.
+ * JSON 문자열로 변환하는 유틸리티 메서드
  */
 public final class JsonUtils {
 

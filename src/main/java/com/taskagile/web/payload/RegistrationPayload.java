@@ -5,7 +5,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import com.taskagile.domain.application.commands.RegistrationCommand;
-
+/**
+ * 회원가입에 사용되는 데이터를 담고 있는 객체
+ *
+ * 페이로드는 회원가입 데이터 전송과 관련된 관심사를 처리하는 객체입니다.
+ */
 public class RegistrationPayload {
   @Size(min = 2, max = 50, message = "사용자명은 2글자와 50글자 사이여야 합니다.")
   @NotNull

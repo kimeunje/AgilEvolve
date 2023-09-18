@@ -1,5 +1,10 @@
 package com.taskagile.domain.application.commands;
 
+/**
+ * 회원가입에 사용되는 데이터를 담고 있는 객체
+ *
+ * 커맨드는 회원가입 비즈니스 로직과 관련된 관심사를 처리하는 객체입니다.
+ */
 public class RegistrationCommand {
   private String username;
   private String emailAddress;

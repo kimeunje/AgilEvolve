@@ -15,6 +15,9 @@ import com.taskagile.web.payload.RegistrationPayload;
 import com.taskagile.web.results.ApiResult;
 import com.taskagile.web.results.Result;
 
+/**
+ * 회원가입 API 요청을 처리하는 컨트롤러
+ */
 @Controller
 public class RegistrationApiController {
   private UserService service;

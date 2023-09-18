@@ -6,6 +6,9 @@ import com.taskagile.domain.application.UserService;
 import com.taskagile.domain.application.commands.RegistrationCommand;
 import com.taskagile.domain.model.user.RegistrationException;
 
+/**
+ * 사용자 관련 비즈니스 로직
+ */
 @Service
 public class UserServiceImpl implements UserService {
   @Override
