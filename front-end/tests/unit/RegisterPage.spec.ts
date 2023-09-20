@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type SpyInstance } from 'vitest'
-import { shallowMount, VueWrapper, DOMWrapper, flushPromises } from '@vue/test-utils'
+import { mount, VueWrapper, DOMWrapper, flushPromises } from '@vue/test-utils'
 import RegisterPage from '@/views/RegisterPage.vue'
 import registrationService from '@/services/registration'
 
@@ -10,7 +10,6 @@ describe('RegisterPage', () => {
   let fieldEmailAddress: DOMWrapper<Element>
   let fieldPassword: DOMWrapper<Element>
   let buttonSubmit: DOMWrapper<Element>
-
   let registerSpy: SpyInstance
 
   beforeEach(() => {
@@ -20,7 +19,7 @@ describe('RegisterPage', () => {
 
     registerSpy = vi.spyOn(registrationService, 'register')
 
-    wrapper = shallowMount(RegisterPage, {
+    wrapper = mount(RegisterPage, {
       props: {
         isAuthenticated: true
       },
@@ -47,12 +46,8 @@ describe('RegisterPage', () => {
   })
 
   it('올바른 콘텐츠를 렌더링해야 합니다.', () => {
-    const logo = wrapper.find('.logo')
-    expect(logo.attributes('src')).toEqual('/static/images/logo.png')
-
-    const tagline = wrapper.find('.tagline')
-    expect(tagline.text()).toEqual('Open source task management tool')
-
+    expect(wrapper.find('.logo').attributes('src')).toEqual('/static/images/logo.png')
+    expect(wrapper.find('.tagline').text()).toEqual('Open source task management tool')
     expect((fieldUsername.element as HTMLInputElement).value).toEqual('')
     expect((fieldEmailAddress.element as HTMLInputElement).value).toEqual('')
     expect((fieldPassword.element as HTMLInputElement).value).toEqual('')
