@@ -61,6 +61,17 @@ public class User extends AbstractBaseEntity {
     return user;
   }
 
+  /**
+   * 사용자 이름 저장
+   *
+   * @param firstName 성
+   * @param lastName  이름
+   */
+  public void updateName(String firstName, String lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
   public Long getId() {
     return id;
   }

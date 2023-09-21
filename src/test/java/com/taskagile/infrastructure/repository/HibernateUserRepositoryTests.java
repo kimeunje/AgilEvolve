@@ -1,21 +1,19 @@
 package com.taskagile.infrastructure.repository;
 
-import com.taskagile.domain.model.user.User;
-import com.taskagile.domain.model.user.UserRepository;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
-
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
+import org.junit.jupiter.api.Test;
+
+import com.taskagile.domain.model.user.User;
+import com.taskagile.domain.model.user.UserRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * 테스트 메소드는 [작업 단위_테스트 중인 상태_ 예상되는 행동] 명명 규약을 따른다.
  */
-@ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
 public class HibernateUserRepositoryTests {

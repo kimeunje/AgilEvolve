@@ -9,6 +9,9 @@ import jakarta.validation.ConstraintViolation;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * 테스트 메소드는 [작업 단위_테스트 중인 상태_ 예상되는 행동] 명명 규약을 따른다.
  */
+@ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
 public class RegistrationPayloadTests {
   private Validator validator;
 

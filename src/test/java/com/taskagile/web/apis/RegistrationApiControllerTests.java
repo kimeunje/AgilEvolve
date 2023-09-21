@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import com.taskagile.config.SecurityConfiguration;
 import com.taskagile.domain.application.UserService;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.doThrow;
  *
  * 테스트 메소드는 [작업 단위_테스트 중인 상태_ 예상되는 행동] 명명 규약을 따른다.
  */
-@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 @ContextConfiguration(classes = { SecurityConfiguration.class, RegistrationApiController.class })
 @WebMvcTest
 public class RegistrationApiControllerTests {
