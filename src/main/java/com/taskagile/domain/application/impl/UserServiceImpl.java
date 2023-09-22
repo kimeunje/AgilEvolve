@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.taskagile.domain.application.UserService;
 import com.taskagile.domain.application.commands.RegistrationCommand;
 import com.taskagile.domain.common.event.DomainEventPublisher;
@@ -18,8 +20,6 @@ import com.taskagile.domain.model.user.SimpleUser;
 import com.taskagile.domain.model.user.User;
 import com.taskagile.domain.model.user.UserRepository;
 import com.taskagile.domain.model.user.events.UserRegisteredEvent;
-
-import io.micrometer.common.util.StringUtils;
 
 /**
  * 사용자 관련 비즈니스 로직
