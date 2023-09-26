@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "esModuleInterop": true
+  },
   "files": [],
   "references": [
     {
@@ -11,7 +14,7 @@
       "path": "./tsconfig.vitest.json"
     },
     {
-      "path": "./nightwatch/tsconfig.json"
+      "path": "../front-end/cypress/e2e/tsconfig.json"
     }
   ]
 }
