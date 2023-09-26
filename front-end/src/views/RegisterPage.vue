@@ -94,3 +94,4 @@ export default {
   margin: 20px 0 40px 0;
 }
 </style>
+@/services/registration/registration
