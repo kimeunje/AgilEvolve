@@ -41,12 +41,12 @@ describe('services/registration', () => {
   it('요청이 실패하면 회원가입에 실패해야 합니다.', async () => {
     expect.assertions(1)
 
-    mock.onPost('/registrations').reply(400, { message: 'Bad request' })
+    mock.onPost('/registrations').reply(400, { data: { message: 'Bad request' } })
 
     try {
       const response: any = await registrationService.register(loginDetail)
     } catch (error: any) {
-      expect(error.response.data.message).toEqual('Bad request')
+      expect(error.message).toEqual('잘못된 요청입니다.')
     }
   })
 })

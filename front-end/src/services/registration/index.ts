@@ -1,4 +1,5 @@
 import axios from 'axios'
+import errorParser from '@/utils/error-parser'
 
 export default {
   register(detail: { username: string; emailAddress: string; password: string }) {
@@ -9,7 +10,7 @@ export default {
           resolve(data)
         })
         .catch((error) => {
-          reject(error)
+          reject(errorParser.parse(error))
         })
     })
   }

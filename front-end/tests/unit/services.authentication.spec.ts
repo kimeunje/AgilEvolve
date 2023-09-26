@@ -40,12 +40,12 @@ describe('services/registration', () => {
   it('요청이 실패하면 호출한 곳에 에러를 전파해야 한다.', async () => {
     expect.assertions(1)
 
-    mock.onPost('/authentications').reply(400, { message: 'Bad request' })
+    mock.onPost('/authentications').reply(400, { data: { message: 'Bad request' } })
 
     try {
       const response: any = await authenticationService.authenticate(loginDetail)
     } catch (error: any) {
-      expect(error.response.data.message).toEqual('Bad request')
+      expect(error.message).toEqual('잘못된 요청입니다.')
     }
   })
 })

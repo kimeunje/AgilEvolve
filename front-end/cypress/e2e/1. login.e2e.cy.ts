@@ -20,7 +20,7 @@ describe('Login Page', () => {
 
     cy.wait(500)
     loginPage.elements.getFormError().should('be.visible')
-    loginPage.elements.getFormError().should('have.text', 'Request failed with status code 400')
+    loginPage.elements.getFormError().should('have.text', '유효하지 않은 자격입니다.')
   })
 
   it('유효한 아이디로 로그인 시도', () => {
