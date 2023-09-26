@@ -101,7 +101,7 @@ describe('RegisterPage', () => {
     wrapper.vm.submitForm()
     expect(registerSpy).toBeCalled()
     await flushPromises()
-    expect(submitFormSpy).toHaveBeenCalledWith({ name: 'LoginPage' })
+    expect(submitFormSpy).toHaveBeenCalledWith({ name: 'login' })
   })
 
   it('기존 사용자면 회원가입에 실패해야 합니다.', async () => {

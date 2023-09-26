@@ -93,7 +93,7 @@ describe('LoginPage', () => {
     wrapper.vm.submitForm()
     expect(authenticateSpy).toBeCalled()
     await flushPromises()
-    expect(submitFormFn).toHaveBeenCalledWith({ name: 'HomePage' })
+    expect(submitFormFn).toHaveBeenCalledWith({ name: 'home' })
   })
 
   it('자격이 유효하지 않으면 실패해야 합니다.', async () => {
