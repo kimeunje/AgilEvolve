@@ -4,7 +4,7 @@ class HomePage {
   }
 
   elements = {
-    getPageTitle: () => cy.get('h1.page-title')
+    getLogoImage: () => cy.get('.logo img')
   }
 }
 

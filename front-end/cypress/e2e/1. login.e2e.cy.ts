@@ -29,7 +29,7 @@ describe('Login Page', () => {
       cy.login(user.username, user.password)
 
       cy.wait(500)
-      homePage.elements.getPageTitle().should('have.text', 'Home Page')
+      homePage.elements.getLogoImage().should('be.visible')
     })
   })
 
@@ -39,7 +39,7 @@ describe('Login Page', () => {
       cy.login(user.emailAddress, user.password)
 
       cy.wait(500)
-      homePage.elements.getPageTitle().should('have.text', 'Home Page')
+      homePage.elements.getLogoImage().should('be.visible')
     })
   })
 })

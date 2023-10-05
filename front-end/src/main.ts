@@ -25,7 +25,8 @@ axios.interceptors.response.use(
 library.add(faUserSecret, faHouse, faSearch, faPlus)
 
 const app = createApp(App)
+const pinia = createPinia()
 
-app.component('font-awesome-icon', FontAwesomeIcon).use(createPinia()).use(router)
+app.component('font-awesome-icon', FontAwesomeIcon).use(pinia).use(router)
 
 app.mount('#app')

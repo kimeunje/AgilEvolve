@@ -5,20 +5,37 @@
       <div class="boards-section">
         <h2 class="section-title">Personal Boards</h2>
         <div class="boards d-flex align-content-start flex-wrap">
-          <div class="board list-inline-item">
-            <h3>vuejs.spring-boot.mysql</h3>
+          <div class="board list-inline-item" v-for="board in personalBoards" v-bind:key="board.id"
+            @click="openBoard(board)">
+            <h3>{{ board.name }}</h3>
             <p>
-              An implementation of TaskAgile application with Vue.js, Spring Boot, and MySQL
+              {{ board.description }}
             </p>
           </div>
-          <div class="board add list-inline-item">
+          <div class="board add list-inline-item" @click="createBoard('team')">
+            <font-awesome-icon :icon="['fas', 'plus']" />
+            <div>Create New Board</div>
+          </div>
+        </div>
+      </div>
+      <div class="boards-section" v-for="team in teamBoards" v-bind:key="team.id">
+        <h2 class="section-title">{{ team.name }}</h2>
+        <div class="boards d-flex align-content-start flex-wrap">
+          <div class="board list-inline-item" v-for="board in team.boards" v-bind:key="board.id"
+            @click="openBoard(board)">
+            <h3>{{ board.name }}</h3>
+            <p>
+              {{ board.description }}
+            </p>
+          </div>
+          <div class="board add list-inline-item" @click="createBoard('team')">
             <font-awesome-icon :icon="['fas', 'plus']" />
             <div>Create New Board</div>
           </div>
         </div>
       </div>
       <div class="create-team-wrapper">
-        <button class="btn btn-link">+ Create New Team</button>
+        <button class="btn btn-link" @click="createTeam()">+ Create New Team</button>
       </div>
     </div>
   </div>
@@ -26,10 +43,27 @@
 
 <script lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
+import { useBoardUserStore } from '@/stores/useBoardUserStore'
+import { mapState } from 'pinia'
 export default {
   name: 'HomePage',
+
+  computed: {
+    ...mapState(useBoardUserStore, ['personalBoards', 'teamBoards'])
+  },
+
   components: {
     PageHeader
+  },
+
+  methods: {
+    openBoard(board: { id: any }) {
+      this.$router.push({ name: 'Board', params: { boardId: board.id } })
+    },
+    createBoard(team: any) {
+    },
+    createTeam() {
+    }
   }
 }
 </script>
