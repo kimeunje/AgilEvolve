@@ -74,15 +74,15 @@ export const useBoardUserStore = defineStore('boardUser', {
     }
   },
   actions: {
-    async getMyData() {
-      const res = await meService.getMyData()
-      this.updateMyData(res as State)
-    },
-    updateMyData(data: { user: { name: any }; teams: any; boards: any }) {
-      this.user.name = data.user.name
-      this.teams = data.teams
-      this.boards = data.boards
-    },
+    // async getMyData() {
+    //   const res = await meService.getMyData()
+    //   this.updateMyData(res as State)
+    // },
+    // updateMyData(data: { user: { name: any }; teams: any; boards: any }) {
+    //   this.user.name = data.user.name
+    //   this.teams = data.teams
+    //   this.boards = data.boards
+    // },
     addTeam(team: any) {
       this.teams.push(team)
     },

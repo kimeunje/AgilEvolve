@@ -46,32 +46,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { useBoardUserStore } from '@/stores/useBoardUserStore'
-import { mapState } from 'pinia'
+<script setup lang="ts">
 import { onMounted } from 'vue'
-export default {
-  name: 'PageHeader',
+import { useRouter } from 'vue-router';
+import { useBoardUserStore } from '@/stores/useBoardUserStore'
 
-  setup() {
-    const boardUserStore = useBoardUserStore()
-    onMounted(async () => {
-      await boardUserStore.getMyData();
-    });
-  },
 
-  computed: {
-    ...mapState(useBoardUserStore, ['user', 'hasBoards', 'personalBoards', 'teamBoards'])
-  },
+const { user, hasBoards, personalBoards, teamBoards } = useBoardUserStore()
+const router = useRouter()
 
-  methods: {
-    goHome() {
-      this.$router.push({ name: 'home' })
-    },
-    openBoard(board: { id: any }) {
-      this.$router.push({ name: 'board', params: { boardId: board.id } })
-    }
-  }
+onMounted(() => {
+  // getMyData();
+});
+
+const goHome = () => {
+  router.push({ name: 'home' })
+}
+
+const openBoard = (board: { id: any }) => {
+  router.push({ name: 'board', params: { boardId: board.id } })
 }
 </script>
 
@@ -132,10 +125,6 @@ export default {
       border: 1px solid #eee;
       border-radius: 5px;
     }
-
-    input:focus {
-      border: 1px solid #377EF6;
-    }
   }
 }
 
@@ -143,4 +132,3 @@ export default {
   padding: 2px 5px !important;
 }
 </style>
-@/stores

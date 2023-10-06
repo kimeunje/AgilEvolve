@@ -12,7 +12,7 @@
               {{ board.description }}
             </p>
           </div>
-          <div class="board add list-inline-item" @click="createBoard('team')">
+          <div class="board add list-inline-item" @click="createBoard('')">
             <font-awesome-icon :icon="['fas', 'plus']" />
             <div>Create New Board</div>
           </div>
@@ -28,7 +28,7 @@
               {{ board.description }}
             </p>
           </div>
-          <div class="board add list-inline-item" @click="createBoard('team')">
+          <div class="board add list-inline-item" @click="createBoard(team)">
             <font-awesome-icon :icon="['fas', 'plus']" />
             <div>Create New Board</div>
           </div>
@@ -39,33 +39,61 @@
       </div>
     </div>
   </div>
+  <CreateBoardModal :teamId="selectedTeamId" @created="onBoardCreated" @close="boardModalClose"
+    ref="boardModalComponent" />
+  <CreateTeamModal @close="teamModalClose" ref="teamModalComponent" />
 </template>
 
-<script lang="ts">
-import PageHeader from '@/components/PageHeader.vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
-import { mapState } from 'pinia'
-export default {
-  name: 'HomePage',
 
-  computed: {
-    ...mapState(useBoardUserStore, ['personalBoards', 'teamBoards'])
-  },
+import { Modal } from 'bootstrap';
 
-  components: {
-    PageHeader
-  },
+import PageHeader from '@/components/PageHeader.vue';
+import CreateBoardModal from '@/modals/CreateBoardModal.vue';
+import CreateTeamModal from '@/modals/CreateTeamModal.vue';
 
-  methods: {
-    openBoard(board: { id: any }) {
-      this.$router.push({ name: 'Board', params: { boardId: board.id } })
-    },
-    createBoard(team: any) {
-    },
-    createTeam() {
-    }
-  }
+
+const boardModalComponent = ref<typeof CreateBoardModal | null>(null);
+const teamModalComponent = ref<typeof CreateTeamModal | null>(null);
+const boardModalObj = ref<Modal | null>(null);
+const teamModalObj = ref<Modal | null>(null);
+const selectedTeamId = ref<number>(0)
+
+const { personalBoards, teamBoards } = useBoardUserStore();
+const router = useRouter()
+
+onMounted(() => {
+  boardModalObj.value = new Modal(boardModalComponent?.value?.$refs.modalEle);
+  teamModalObj.value = new Modal(teamModalComponent?.value?.$refs.modalEle);
+});
+
+const openBoard = (board: { id: any }) => {
+  router.push({ name: 'board', params: { boardId: board.id } })
 }
+
+const createBoard = (team: any) => {
+  selectedTeamId.value = team ? team.id : 0
+  boardModalObj?.value?.show();
+}
+
+const createTeam = () => {
+  teamModalObj?.value?.show();
+}
+
+const onBoardCreated = (boardId: any) => {
+  router.push({ name: 'board', params: { boardId: boardId } })
+}
+
+const boardModalClose = () => {
+  boardModalObj?.value?.hide();
+};
+
+const teamModalClose = () => {
+  teamModalObj?.value?.hide();
+};
 </script>
 
 <style lang="scss" scoped>
