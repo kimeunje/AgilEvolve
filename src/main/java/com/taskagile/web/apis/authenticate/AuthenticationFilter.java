@@ -9,7 +9,12 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +40,10 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
 
   private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 
+  private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+  private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
+      .getContextHolderStrategy();
+
   public AuthenticationFilter() {
     super(new AntPathRequestMatcher("/api/authentications", "POST"));
   }
@@ -53,7 +62,13 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
 
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.username,
         loginRequest.password);
-    return this.getAuthenticationManager().authenticate(token);
+    Authentication authentication = this.getAuthenticationManager().authenticate(token);
+    SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+    context.setAuthentication(authentication);
+    securityContextHolderStrategy.setContext(context);
+    securityContextRepository.saveContext(context, request, response);
+
+    return authentication;
   }
 
   static class LoginRequest {
@@ -80,5 +95,4 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
       this.password = password;
     }
   }
-
 }

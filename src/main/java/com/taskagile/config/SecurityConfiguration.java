@@ -24,6 +24,7 @@ import com.taskagile.web.apis.authenticate.SimpleLogoutSuccessHandler;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+  @Autowired
   private AuthenticationConfiguration authenticationConfiguration;
 
   public static final String[] PUBLIC = new String[] {
@@ -35,23 +36,11 @@ public class SecurityConfiguration {
       "/api/registrations",
 
       // 정적 자원
-      "/static/**",
-      "/js/**",
-      "/css/**",
+      "/assets/**",
       "/images/**",
-      "/favicon.ico"
+      "/static/**",
+      "/favicon.ico",
   };
-
-  @Autowired
-  private void setSecurityConfiguration(AuthenticationConfiguration authenticationConfiguration) {
-    this.authenticationConfiguration = authenticationConfiguration;
-  }
-
-  @Bean
-  AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-      throws Exception {
-    return authenticationConfiguration.getAuthenticationManager();
-  }
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,7 +53,7 @@ public class SecurityConfiguration {
             .loginPage("/login"))
         .logout((logout) -> logout
             .logoutUrl("/logout")
-            .logoutSuccessUrl("/login?logged-out"))
+            .logoutSuccessHandler(logoutSuccessHandler()))
         .csrf((csrf) -> csrf.disable());
 
     return http.build();
@@ -74,6 +63,12 @@ public class SecurityConfiguration {
   @Bean
   PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+      throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
   }
 
   @Bean
