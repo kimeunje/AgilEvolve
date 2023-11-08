@@ -26,7 +26,6 @@ public interface UserRepository {
    * 새로운 사용자 또는 존재하는 사용자 정보 저장
    *
    * @param user 저장된 유저 인스턴스
-   * @return 새롭게 저장된 유저
    */
   void save(User user);
 }

@@ -56,6 +56,8 @@ import CreateBoardModal from '@/modals/CreateBoardModal.vue';
 import CreateTeamModal from '@/modals/CreateTeamModal.vue';
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
 
+import type { Team } from '@/interfaces/TeamInterface';
+
 
 const boardModalComponent = ref<typeof CreateBoardModal | null>(null);
 const teamModalComponent = ref<typeof CreateTeamModal | null>(null);
@@ -75,7 +77,7 @@ const openBoard = (board: { id: number }) => {
   router.push({ name: 'board', params: { boardId: board.id } })
 }
 
-const createBoard = (team: any | null) => {
+const createBoard = (team: Team | null) => {
   selectedTeamId.value = team ? team.id : 0
   boardModalObj?.value?.show();
 }

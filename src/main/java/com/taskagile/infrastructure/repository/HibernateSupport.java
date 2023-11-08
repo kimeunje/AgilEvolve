@@ -7,9 +7,9 @@ import jakarta.persistence.EntityManager;
 /**
  * Hibernate의 Session 객체 생성
  */
-abstract class HibernateSupport {
+abstract class HibernateSupport<T> {
 
-  EntityManager entityManager;
+  private EntityManager entityManager;
 
   HibernateSupport(EntityManager entityManager) {
     this.entityManager = entityManager;
@@ -17,5 +17,10 @@ abstract class HibernateSupport {
 
   Session getSession() {
     return entityManager.unwrap(Session.class);
+  }
+
+  public void save(T object) {
+    entityManager.persist(object);
+    entityManager.flush();
   }
 }

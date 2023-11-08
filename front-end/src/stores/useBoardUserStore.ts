@@ -20,54 +20,26 @@ export const useBoardUserStore = defineStore('boardUser', {
   },
   getters: {
     getUser: (state) => {
-      // return state.user
-      return { name: 'raccoon' }
+      return state.user
     },
     hasBoards: (state) => {
-      // return state.boards.length > 0
-      return true
+      return state.boards.length > 0
     },
     personalBoards: (state) => {
-      // return state.boards.filter((board: Board) => board.teamId === 0)
-      return [
-        {
-          id: 1,
-          name: 'vuejs.spring-boot.mariadb',
-          description:
-            'An implementation of TaskAgile application with Vue.js, Spring Boot, and mariadb'
-        }
-      ]
+      return state.boards.filter((board: Board) => board.teamId === 0)
     },
     teamBoards: (state) => {
-      // const teams: Team[] = []
+      const teams: Team[] = []
 
-      // state.teams.forEach((team: Team) => {
-      //   teams.push({
-      //     id: team.id,
-      //     name: team.name,
-      //     boards: state.boards.filter((board: Board) => board.teamId === team.id)
-      //   })
-      // })
+      state.teams.forEach((team: Team) => {
+        teams.push({
+          id: team.id,
+          name: team.name,
+          boards: state.boards.filter((board: Board) => board.teamId === team.id)
+        })
+      })
 
-      // return teams
-      return [
-        {
-          id: 1,
-          name: 'Sales & Marketing',
-          boards: [
-            {
-              id: 2,
-              name: '2023 Planning',
-              description: '2023 sales & marketing planning'
-            },
-            {
-              id: 3,
-              name: 'Ongoing Campaigns',
-              description: '2023 ongoing marketing campaigns'
-            }
-          ]
-        }
-      ]
+      return teams
     }
   },
   actions: {

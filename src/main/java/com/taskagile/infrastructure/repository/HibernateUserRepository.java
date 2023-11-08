@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  * @UserRepository 하이버네이트 구현체
  */
 @Repository
-public class HibernateUserRepository extends HibernateSupport implements UserRepository {
+public class HibernateUserRepository extends HibernateSupport<User> implements UserRepository {
 
   public HibernateUserRepository(EntityManager entityManager) {
     super(entityManager);
@@ -32,11 +32,5 @@ public class HibernateUserRepository extends HibernateSupport implements UserRep
     Query<User> query = getSession().createQuery("from User where emailAddress = :emailAddress", User.class);
     query.setParameter("emailAddress", emailAddress);
     return query.uniqueResult();
-  }
-
-  @Override
-  public void save(User user) {
-    entityManager.persist(user);
-    entityManager.flush();
   }
 }

@@ -10,11 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import com.taskagile.domain.common.security.AccessDeniedHandlerImpl;
 import com.taskagile.web.apis.authenticate.AuthenticationFilter;
 import com.taskagile.web.apis.authenticate.SimpleAuthenticationFailureHandler;
 import com.taskagile.web.apis.authenticate.SimpleAuthenticationSuccessHandler;
@@ -45,6 +47,8 @@ public class SecurityConfiguration {
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
+        .exceptionHandling((exceptionHandling) -> exceptionHandling
+            .accessDeniedHandler(accessDeniedHandler()))
         .authorizeHttpRequests((requests) -> requests
             .requestMatchers(PUBLIC).permitAll()
             .anyRequest().authenticated())
@@ -95,4 +99,8 @@ public class SecurityConfiguration {
     return new SimpleLogoutSuccessHandler();
   }
 
+  @Bean
+  AccessDeniedHandler accessDeniedHandler() {
+    return new AccessDeniedHandlerImpl();
+  }
 }

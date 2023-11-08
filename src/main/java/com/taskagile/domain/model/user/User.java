@@ -48,7 +48,7 @@ public class User extends AbstractBaseEntity {
   }
 
   /**
-   * 회원가입 시 사용자 정보를 저장하기 위한 생성자
+   * 새로운 사용자를 생성
    */
   public static User create(String username, String emailAddress, String password) {
     User user = new User();
@@ -72,8 +72,8 @@ public class User extends AbstractBaseEntity {
     this.lastName = lastName;
   }
 
-  public Long getId() {
-    return id;
+  public UserId getId() {
+    return new UserId(id);
   }
 
   public String getUsername() {

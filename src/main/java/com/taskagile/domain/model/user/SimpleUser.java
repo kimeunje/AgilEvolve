@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class SimpleUser implements UserDetails {
   private static final long serialVersionUID = 2244624228L;
 
-  private long userId;
+  private UserId userId;
   private String username;
   private String password;
 
@@ -27,7 +27,7 @@ public class SimpleUser implements UserDetails {
     this.password = user.getPassword();
   }
 
-  public long getUserId() {
+  public UserId getUserId() {
     return this.userId;
   }
 
