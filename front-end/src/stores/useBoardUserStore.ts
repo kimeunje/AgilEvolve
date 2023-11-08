@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import meService from '@/services/me'
+import type { Team } from '@/interfaces/TeamInterface'
+import type { Board } from '@/interfaces/BoardInterface'
+import type { User } from '@/interfaces/UserInterface'
 
 interface State {
   user: User
@@ -7,42 +10,25 @@ interface State {
   boards: Board[]
 }
 
-interface User {
-  name: string | null
-}
-
-interface Team {
-  // id: number | null
-  // name: string | null
-}
-
-interface Board {
-  // id: number | null
-  // name: string | null
-  // description: string | null
-  // teamId: number | null
-}
-
 export const useBoardUserStore = defineStore('boardUser', {
-  state: (): State => ({
-    user: {
-      name: null
-    },
-    teams: [
-      /* {id, name} */
-    ],
-    boards: [
-      /* {id, name, description, teamId} */
-    ]
-  }),
+  state: (): State => {
+    return {
+      user: { name: '' },
+      teams: [],
+      boards: []
+    }
+  },
   getters: {
-    user: (state) => {
-      return { name: 'k.eunseo' }
+    getUser: (state) => {
+      // return state.user
+      return { name: 'raccoon' }
     },
     hasBoards: (state) => {
+      // return state.boards.length > 0
       return true
     },
     personalBoards: (state) => {
+      // return state.boards.filter((board: Board) => board.teamId === 0)
       return [
         {
           id: 1,
@@ -53,6 +39,17 @@ export const useBoardUserStore = defineStore('boardUser', {
       ]
     },
     teamBoards: (state) => {
+      // const teams: Team[] = []
+
+      // state.teams.forEach((team: Team) => {
+      //   teams.push({
+      //     id: team.id,
+      //     name: team.name,
+      //     boards: state.boards.filter((board: Board) => board.teamId === team.id)
+      //   })
+      // })
+
+      // return teams
       return [
         {
           id: 1,
@@ -74,19 +71,17 @@ export const useBoardUserStore = defineStore('boardUser', {
     }
   },
   actions: {
-    // async getMyData() {
-    //   const res = await meService.getMyData()
-    //   this.updateMyData(res as State)
-    // },
-    // updateMyData(data: { user: { name: any }; teams: any; boards: any }) {
-    //   this.user.name = data.user.name
-    //   this.teams = data.teams
-    //   this.boards = data.boards
-    // },
-    addTeam(team: any) {
+    async getMyData(): Promise<void> {
+      const res: State = await meService.getMyData()
+      this.updateMyData(res)
+    },
+    updateMyData(res: State) {
+      this.$patch({ user: res.user, teams: res.teams, boards: res.boards })
+    },
+    addTeam(team: Team) {
       this.teams.push(team)
     },
-    addBoard(board: any) {
+    addBoard(board: Board) {
       this.boards.push(board)
     }
   }

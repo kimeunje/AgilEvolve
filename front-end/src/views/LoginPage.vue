@@ -37,9 +37,11 @@
 <script lang="ts">
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import authenticationService from '@/services/authentication'
+
 import Logo from '@/components/Logo.vue'
 import PageFooter from '@/components/PageFooter.vue'
+import authenticationService from '@/services/authentication'
+
 
 export default {
   name: 'LoginPage',
@@ -76,7 +78,7 @@ export default {
 
       authenticationService.authenticate(this.form).then(() => {
         this.$router.push({ name: 'home' })
-      }).catch((error: any) => {
+      }).catch((error: Error) => {
         this.errorMessage = error.message
       })
     }

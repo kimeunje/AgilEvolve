@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
+
 import registrationService from '@/services/registration'
 
 describe('services/registration', () => {
@@ -44,7 +45,9 @@ describe('services/registration', () => {
     mock.onPost('/registrations').reply(400, { data: { message: 'Bad request' } })
 
     try {
-      const response: any = await registrationService.register(loginDetail)
+      const response = await registrationService.register(loginDetail)
+      // 의미없는 변수를 나타내기 위해 _를 사용합니다.
+      const _ = response
     } catch (error: any) {
       expect(error.message).toEqual('잘못된 요청입니다.')
     }

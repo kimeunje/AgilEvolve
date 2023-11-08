@@ -1,11 +1,13 @@
 import axios from 'axios'
 import errorParser from '@/utils/error-parser'
 
+import type { UserData } from '@/interfaces/UserInterface'
+
 export default {
   /**
    * 현재 사용자의 이름, 보드, 팀 조회하기
    */
-  getMyData() {
+  getMyData(): Promise<UserData> {
     return new Promise((resolve, reject) => {
       axios
         .post('/me')
@@ -13,7 +15,9 @@ export default {
           resolve(data)
         })
         .catch((error) => {
-          reject(errorParser.parse(error))
+          if (axios.isAxiosError(error)) {
+            reject(errorParser.parse(error))
+          }
         })
     })
   }

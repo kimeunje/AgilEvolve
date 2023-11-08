@@ -5,14 +5,17 @@ import axios from 'axios'
 import App from './App.vue'
 import router from './router'
 
+// 부트스트랩 설정
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap/dist/js/bootstrap'
 
+// 폰트 아이콘 설정
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUserSecret, faHouse, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
 
-// axios 부트스트랩
+// axios 설정
 axios.defaults.baseURL = '/api'
 axios.defaults.headers.common.Accept = 'application/json'
 axios.interceptors.response.use(

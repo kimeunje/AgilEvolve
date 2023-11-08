@@ -12,7 +12,7 @@
               {{ board.description }}
             </p>
           </div>
-          <div class="board add list-inline-item" @click="createBoard('')">
+          <div class="board add list-inline-item" @click="createBoard(null)">
             <font-awesome-icon :icon="['fas', 'plus']" />
             <div>Create New Board</div>
           </div>
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="create-team-wrapper">
-        <button class="btn btn-link" @click="createTeam()">+ Create New Team</button>
+        <button class="btn btn-link team-code" @click="createTeam()">+ Create New Team</button>
       </div>
     </div>
   </div>
@@ -47,13 +47,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
-import { useBoardUserStore } from '@/stores/useBoardUserStore'
+import { storeToRefs } from 'pinia';
 
 import { Modal } from 'bootstrap';
 
 import PageHeader from '@/components/PageHeader.vue';
 import CreateBoardModal from '@/modals/CreateBoardModal.vue';
 import CreateTeamModal from '@/modals/CreateTeamModal.vue';
+import { useBoardUserStore } from '@/stores/useBoardUserStore'
 
 
 const boardModalComponent = ref<typeof CreateBoardModal | null>(null);
@@ -62,7 +63,7 @@ const boardModalObj = ref<Modal | null>(null);
 const teamModalObj = ref<Modal | null>(null);
 const selectedTeamId = ref<number>(0)
 
-const { personalBoards, teamBoards } = useBoardUserStore();
+const { personalBoards, teamBoards } = storeToRefs(useBoardUserStore());
 const router = useRouter()
 
 onMounted(() => {
@@ -70,11 +71,11 @@ onMounted(() => {
   teamModalObj.value = new Modal(teamModalComponent?.value?.$refs.modalEle);
 });
 
-const openBoard = (board: { id: any }) => {
+const openBoard = (board: { id: number }) => {
   router.push({ name: 'board', params: { boardId: board.id } })
 }
 
-const createBoard = (team: any) => {
+const createBoard = (team: any | null) => {
   selectedTeamId.value = team ? team.id : 0
   boardModalObj?.value?.show();
 }
@@ -83,7 +84,7 @@ const createTeam = () => {
   teamModalObj?.value?.show();
 }
 
-const onBoardCreated = (boardId: any) => {
+const onBoardCreated = (boardId: number) => {
   router.push({ name: 'board', params: { boardId: boardId } })
 }
 

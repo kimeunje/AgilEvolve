@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type SpyInstance } from 'vitest'
 import { mount, VueWrapper, DOMWrapper, flushPromises } from '@vue/test-utils'
+
 import LoginPage from '@/views/LoginPage.vue'
 import authenticationService from '@/services/authentication'
 
@@ -19,9 +20,6 @@ describe('LoginPage', () => {
     authenticateSpy = vi.spyOn(authenticationService, 'authenticate')
 
     wrapper = mount(LoginPage, {
-      props: {
-        isAuthenticated: true
-      },
       global: {
         mocks: {
           $router: mockRouter
@@ -53,7 +51,7 @@ describe('LoginPage', () => {
     expect(wrapper.find('.link-forgot-password')).toBeTruthy()
   })
 
-  it('초깃갑을 갖는 데이터 모델을 포함해야 합니다.', () => {
+  it('초깃값을 갖는 데이터 모델을 포함해야 합니다.', () => {
     const loginData = wrapper.vm.$data
 
     expect(loginData.form.username).toEqual('')

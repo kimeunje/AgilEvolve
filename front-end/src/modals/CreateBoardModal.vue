@@ -38,11 +38,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
-import { useBoardUserStore } from '@/stores/useBoardUserStore';
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
 import boardService from '@/services/boards';
+import type { Board } from '@/interfaces/BoardInterface'
+import { useBoardUserStore } from '@/stores/useBoardUserStore';
 
 
 const props = defineProps({ teamId: Number });
@@ -82,7 +83,7 @@ const saveBoard = () => {
   };
 
   boardService.create(newBoard)
-    .then((createdBoard: any) => {
+    .then((createdBoard: Board) => {
       boardUserStore.addBoard(createdBoard)
       emit('created', createdBoard.id);
       close();

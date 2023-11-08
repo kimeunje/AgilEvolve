@@ -1,7 +1,12 @@
 import _ from 'lodash'
+import { AxiosError } from 'axios'
+
+type ErrorResponse = {
+  message: string
+}
 
 export default {
-  parse (error: any) {
+  parse(error: AxiosError<ErrorResponse>) {
     if (error.response) {
       const status = error.response.status
       const data = error.response.data

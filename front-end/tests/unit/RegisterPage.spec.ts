@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type SpyInstance } from 'vitest'
 import { mount, VueWrapper, DOMWrapper, flushPromises } from '@vue/test-utils'
+
 import RegisterPage from '@/views/RegisterPage.vue'
 import registrationService from '@/services/registration'
 
@@ -20,9 +21,6 @@ describe('RegisterPage', () => {
     registerSpy = vi.spyOn(registrationService, 'register')
 
     wrapper = mount(RegisterPage, {
-      props: {
-        isAuthenticated: true
-      },
       global: {
         mocks: {
           $router: mockRouter

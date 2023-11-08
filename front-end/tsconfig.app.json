@@ -1,6 +1,12 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "tests/unit/*"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "tests/unit/*",
+  ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
@@ -10,7 +16,8 @@
       "@assets/*": ["./src/shared/assets/*"],
       "@cmp/*": ["./src/shared/cmp/*"],
       "@stores/*": ["./src/shared/stores/*"],
-      "@use/*": ["./src/shared/use/*"]
+      "@use/*": ["./src/shared/use/*"],
+      "@interfaces/*": ["./src/interfaces/*"]
     }
   }
 }

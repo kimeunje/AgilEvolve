@@ -1,8 +1,10 @@
 import axios from 'axios'
 import errorParser from '@/utils/error-parser'
 
+import type { RegisterDetail } from '@/interfaces/UserInterface'
+
 export default {
-  register(detail: { username: string; emailAddress: string; password: string }) {
+  register(detail: RegisterDetail) {
     return new Promise((resolve, reject) => {
       axios
         .post('/registrations', detail)
@@ -10,7 +12,9 @@ export default {
           resolve(data)
         })
         .catch((error) => {
-          reject(errorParser.parse(error))
+          if (axios.isAxiosError(error)) {
+            reject(errorParser.parse(error))
+          }
         })
     })
   }

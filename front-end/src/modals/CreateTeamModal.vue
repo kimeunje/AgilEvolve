@@ -31,12 +31,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { useBoardUserStore } from '@/stores/useBoardUserStore';
 import { required } from '@vuelidate/validators';
 import useVuelidate from '@vuelidate/core';
 
 import teamService from '@/services/teams';
-
+import type { Team } from '@/interfaces/TeamInterface';
+import { useBoardUserStore } from '@/stores/useBoardUserStore';
 
 const modalEle = ref<HTMLInputElement | null>(null);
 const teamNameInput = ref<HTMLInputElement | null>(null);
@@ -66,7 +66,7 @@ const saveTeam = () => {
   };
 
   teamService.create(newBoard)
-    .then((createdTeam: any) => {
+    .then((createdTeam: Team) => {
       boardUserStore.addTeam(createdTeam)
       close();
     })

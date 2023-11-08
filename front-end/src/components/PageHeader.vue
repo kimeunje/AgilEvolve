@@ -11,14 +11,14 @@
           Boards
         </button>
         <div class="dropdown-menu" aria-labelledby="boardsMenu">
-          <div v-show="!hasBoards" class="dropdown-item">No boards</div>
+          <div v-show="!hasBoards" class="dropdown-item no-board">No boards</div>
           <div v-show="hasBoards">
             <h6 class="dropdown-header" v-show="personalBoards.length">Personal Boards</h6>
-            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
-              type="button">{{ board.name }}</button>
+            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)"
+              class="dropdown-item personal-board" type="button">{{ board.name }}</button>
             <div v-for="team in teamBoards" v-bind:key="'t' + team.id">
               <h6 class="dropdown-header">{{ team.name }}</h6>
-              <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
+              <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item team-board"
                 type="button">{{ board.name }}</button>
             </div>
           </div>
@@ -35,7 +35,7 @@
       <div class="dropdown">
         <button class="btn dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
-          {{ user.name }}
+          {{ getUser.name }}
         </button>
         <div class="dropdown-menu" aria-labelledby="profileMenu">
           <button class="dropdown-item" type="button">Profile</button>
@@ -49,21 +49,23 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
+
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
 
-
-const { user, hasBoards, personalBoards, teamBoards } = useBoardUserStore()
+const { getUser, hasBoards, personalBoards, teamBoards } = storeToRefs(useBoardUserStore())
+const { getMyData } = useBoardUserStore()
 const router = useRouter()
 
 onMounted(() => {
-  // getMyData();
+  getMyData()
 });
 
 const goHome = () => {
   router.push({ name: 'home' })
 }
 
-const openBoard = (board: { id: any }) => {
+const openBoard = (board: { id: number }) => {
   router.push({ name: 'board', params: { boardId: board.id } })
 }
 </script>

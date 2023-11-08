@@ -32,11 +32,13 @@
 </template>
 
 <script lang="ts">
-import registrationService from '@/services/registration'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, minLength, maxLength, alphaNum } from '@vuelidate/validators'
+
 import Logo from '@/components/Logo.vue'
 import PageFooter from '@/components/PageFooter.vue'
+import registrationService from '@/services/registration'
+
 
 export default {
   name: 'RegisterPage',
@@ -75,8 +77,8 @@ export default {
 
       registrationService.register(this.form).then(() => {
         this.$router.push({ name: 'login' })
-      }).catch((error: any) => {
-        this.errorMessage = 'Failed to register user. Reason: ' + (error.message ? error.message : 'Unknown') + '.'
+      }).catch((error: Error) => {
+        this.errorMessage = '회원가입에 실패 했습니다. 원인: ' + (error.message ? error.message : '알 수 없는 에러입니다.') + '.'
       })
     }
   }
