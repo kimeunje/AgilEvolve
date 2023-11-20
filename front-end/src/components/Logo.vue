@@ -1,9 +1,15 @@
 <template>
   <div class="logo-wrapper">
-    <img class="logo" src="/static/images/logo.png" alt="로고">
-    <div class="tagline">Open source task management tool</div>
+    <img class="logo" src="/images/logo.png" alt="로고">
+    <div class="tagline">{{ t('logo.tagLine') }}</div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
+</script>
 
 <style lang="scss" scoped>
 .logo-wrapper {

@@ -1,139 +1,114 @@
-import { describe, it, expect, beforeEach, afterEach, afterAll, vi, type SpyInstance } from 'vitest'
-import { mount, VueWrapper, flushPromises, DOMWrapper } from '@vue/test-utils'
-import { createRouter, createWebHistory } from 'vue-router'
+import { VueWrapper, mount } from '@vue/test-utils'
+import { vi, describe, beforeEach, afterEach, it, expect } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 
-import meService from '@/services/me'
-import PageHeader from '@/components/PageHeader.vue'
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
+import { i18n } from '@/locales'
+import router from '@/router'
+
+import PageHeader from '@/components/PageHeader.vue'
 
 vi.mock('@/services/me')
 describe('PageHeader', () => {
   let wrapper: VueWrapper<any>
-  let fieldProfileName: DOMWrapper<Element>
-  let getMyDataSpy: SpyInstance
-
   let store: ReturnType<typeof useBoardUserStore>
 
   beforeEach(() => {
-    const mockRouter = createRouter({
-      history: createWebHistory(),
-      routes: []
-    })
-
-    getMyDataSpy = vi.spyOn(meService, 'getMyData')
-
     wrapper = mount(PageHeader, {
       global: {
-        plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: false }), mockRouter],
+        plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n, router],
         mocks: {
-          $router: mockRouter
-        }
+          t: (msg: string) => msg
+        },
+        stubs: { FontAwesomeIcon: true }
       }
     })
-
     store = useBoardUserStore()
 
-    fieldProfileName = wrapper.find('#profileMenu')
+    // pinia store 값 설정
+    store.$patch({ user: { name: 'John Doe' } })
+    store.$patch({ teams: [{ id: 1, name: 'Team 1' }] })
+    store.$patch({
+      boards: [
+        { teamId: 0, id: 1, name: 'Personal Board', description: 'Test' },
+        { teamId: 1, id: 2, name: 'Team Board', description: 'Test' }
+      ]
+    })
   })
 
   afterEach(() => {
-    getMyDataSpy.mockReset()
-    getMyDataSpy.mockRestore()
     wrapper.unmount()
   })
 
-  afterAll(() => {
-    vi.restoreAllMocks()
+  it('로고를 렌더링합니다', () => {
+    expect(wrapper.find('.logo').exists()).toBe(true)
+    expect(wrapper.find('.logo img').exists()).toBe(true)
+    expect(wrapper.find('.logo .home-icon').exists()).toBe(true)
   })
 
-  it('pinia 스토어가 바인딩 돼야 합니다.', async () => {
-    // pinia 게터 바인딩 확인
-    const profile = store.getUser
-    expect(profile.name).toEqual('raccoon')
+  it('보드 메뉴에 보드를 렌더링합니다', () => {
+    expect(wrapper.find('.boards-menu-toggle').exists()).toBe(true)
+    expect(wrapper.find('.dropdown-toggle#boardsMenu').text()).toBe('header.boardsMenu.label')
+    // board 가 없을 경우 v-show로 표시하지 않음
+    expect(wrapper.findAll('.dropdown-item')[0].isVisible()).toBe(false)
+    // board 가 있을 경우 v-show로 표시
+    expect(wrapper.findAll('.dropdown-item')[1].text()).toBe('Personal Board')
+    expect(wrapper.findAll('.dropdown-item')[2].text()).toBe('Team Board')
   })
 
-  it('페이지 헤더 로딩 후 유저 정보를 불러와야 합니다.', async () => {
-    const profile = 'raccoon'
-    const teamBoard = ['2023 Team Planning', 'Ongoing Campaigns']
-
-    // render 이후에 실행되는 mounted hook을 실행
-    expect(store.getMyData).toHaveBeenCalledOnce()
-    expect(getMyDataSpy).toBeCalled()
-
-    expect(fieldProfileName.text()).toEqual(profile)
-    expect(
-      wrapper.findAll('.team-board').forEach((board, i) => {
-        board.text() === teamBoard[i]
-      })
-    )
+  it('검색창을 렌더링합니다.', () => {
+    expect(wrapper.find('.search-box').exists()).toBe(true)
+    expect(wrapper.find('.search-box input').exists()).toBe(true)
   })
 
-  it('보드를 클릭하면 보드 상세 페이지로 가져야 합니다.', async () => {
-    const openBoardFn = vi.fn()
-    // 첫번째 팀 보드를 가져옴
-    const board = store.teamBoards[0]
-    const openBoardButton = wrapper.find('button.team-board')
-
-    wrapper.vm.$router.push = openBoardFn
-    wrapper.vm.openBoard(board)
-
-    openBoardButton.trigger('click')
-    expect(openBoardFn).toHaveBeenCalledWith({ name: 'board', params: { boardId: 2 } })
+  it('프로필 메뉴를 렌더링합니다', () => {
+    expect(wrapper.find('.profile-menu-toggle').exists()).toBe(true)
+    expect(wrapper.find('.dropdown-toggle#profileMenu').text()).toBe('John Doe')
+    expect(wrapper.findAll('.dropdown-item')[3].text()).toBe('header.profile')
+    expect(wrapper.findAll('.dropdown-item')[4].text()).toBe('header.signOut')
   })
 
-  it('보드에 정보가 없을 시 보드를 불러 올 수 없어야 합니다.', async () => {
-    store.$patch({
-      boards: []
+  it('로고를 클릭하면 goHome 메서드를 호출합니다', async () => {
+    const goHome = vi.spyOn(wrapper.vm, 'goHome')
+    await wrapper.find('.logo').trigger('click')
+    expect(goHome).toHaveBeenCalled()
+  })
+
+  it('보드를 클릭하면 openBoard 메서드를 호출합니다', async () => {
+    const openBoard = vi.spyOn(wrapper.vm, 'openBoard')
+    await wrapper.findAll('.dropdown-item')[1].trigger('click')
+    expect(openBoard).toHaveBeenCalledWith({
+      id: 1,
+      description: 'Test',
+      name: 'Personal Board',
+      teamId: 0
     })
-    await flushPromises()
-
-    expect(wrapper.find('.no-board').isVisible()).toBe(true)
+    await wrapper.findAll('.dropdown-item')[2].trigger('click')
+    expect(openBoard).toHaveBeenCalledWith({
+      id: 2,
+      description: 'Test',
+      name: 'Team Board',
+      teamId: 1
+    })
   })
 
-  it('보드에 teamId가 0일 경우 개인 보드를 불러와야 합니다.', async () => {
-    store.$patch({
-      boards: [
-        {
-          teamId: 0,
-          id: 1,
-          name: '2023 개인 계획',
-          description: '2023 영업 및 마케팅 계획'
-        }
-      ]
-    })
-    await flushPromises()
+  it('로고를 클릭하면 홈 페이지로 이동합니다', async () => {
+    const push = vi.spyOn(router, 'push')
+    await wrapper.find('.logo').trigger('click')
 
-    expect(wrapper.find('.personal-board').isVisible()).toBe(true)
+    expect(push).toHaveBeenCalledTimes(1)
+    expect(push).toHaveBeenCalledWith({ name: 'home' })
   })
 
-  it('보드에 teamId가 0 이외일 경우 팀 보드를 불러와야 합니다.', async () => {
-    store.$patch({
-      boards: [
-        {
-          teamId: 1,
-          id: 2,
-          name: '2018 Planning',
-          description: '2018 sales & marketing planning'
-        },
-        {
-          teamId: 1,
-          id: 3,
-          name: 'Ongoing Campaigns',
-          description: '2018 ongoing marketing campaigns'
-        }
-      ]
-    })
-    store.$patch({
-      teams: [
-        {
-          id: 1,
-          name: 'Sales & Marketing'
-        }
-      ]
-    })
-    await flushPromises()
+  it('보드를 클릭하면 보드 페이지로 이동합니다', async () => {
+    const push = vi.spyOn(router, 'push')
+    await wrapper.findAll('.dropdown-item')[1].trigger('click')
 
-    expect(wrapper.find('.team-board').isVisible()).toBe(true)
+    expect(push).toHaveBeenCalledTimes(1)
+    expect(push).toHaveBeenCalledWith({ name: 'board', params: { boardId: 1 } })
+  })
+
+  it('마운트될 때 getMyData를 호출합니다', () => {
+    expect(store.getMyData).toHaveBeenCalled()
   })
 })

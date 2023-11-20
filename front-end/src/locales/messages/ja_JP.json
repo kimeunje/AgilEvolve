@@ -1,0 +1,83 @@
+{
+  "logo": {
+    "tagLine": "オープンソースのタスク管理ツール"
+  },
+  "header": {
+    "boardsMenu": {
+      "label": "ボード",
+      "noBoard": "ボードなし",
+      "personalBoards": "個人ボード"
+    },
+    "search": "検索",
+    "profile": "プロフィール",
+    "signOut": "サインアウト"
+  },
+  "loginPage": {
+    "form": {
+      "username": {
+        "label": "ユーザー名またはメールアドレス",
+        "required": "ユーザー名またはメールアドレスは必須です"
+      },
+      "password": {
+        "label": "パスワード",
+        "required": "パスワードは必須です"
+      },
+      "submit": "サインイン",
+      "noAccountYet": "まだアカウントをお持ちでないですか？",
+      "signUpHere": "こちらでサインアップ",
+      "forgotPassword": "パスワードをお忘れですか？"
+    }
+  },
+  "registerPage": {
+    "form": {
+      "username": {
+        "label": "ユーザー名",
+        "required": "ユーザー名は必須です",
+        "alphaNum": "ユーザー名は英数字のみ使用できます",
+        "minLength": "ユーザー名は少なくとも{minLength}文字である必要があります",
+        "maxLength": "ユーザー名が長すぎます。最大{maxLength}文字まで使用できます"
+      },
+      "emailAddress": {
+        "label": "メールアドレス",
+        "required": "メールアドレスは必須です",
+        "email": "有効なメールアドレスではありません",
+        "maxLength": "メールアドレスが長すぎます。最大{maxLength}文字まで使用できます"
+      },
+      "password": {
+        "label": "パスワード",
+        "required": "パスワードは必須です",
+        "minLength": "パスワードが短すぎます。少なくとも{minLength}文字である必要があります",
+        "maxLength": "パスワードが長すぎます。最大{maxLength}文字まで使用できます"
+      },
+      "submit": "アカウントを作成",
+      "terms": {
+        "accept": "「アカウントを作成」をクリックすると、{termsOfService}と{privacyPolicy}に同意するものとします",
+        "termsOfService": "利用規約",
+        "privacyPolicy": "プライバシーポリシー"
+      },
+      "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
+      "signIn": "サインイン"
+    }
+  },
+  "homePage": {
+    "personalBoards": "個人ボード",
+    "createNewBoard": "新しいボードを作成",
+    "createNewTeam": "新しいチームを作成"
+  },
+  "pageFooter": {
+    "about": "について",
+    "termOfService": "利用規約",
+    "privacyPolicy": "プライバシーポリシー"
+  },
+  "error": {
+    "request": {
+      "bad": "不正なリクエスト",
+      "notAuthorized": "リクエストが認証されていません",
+      "forbidden": "リクエストが禁止されています",
+      "notFound": "リクエストが失敗しました。サーバー上でリクエストのエンドポイントが見つかりません",
+      "unknownServerError": "サーバーサイドでエラーが発生しました。後でもう一度お試しください",
+      "failed": "リクエストが失敗しました。後でもう一度お試しください",
+      "noResponse": "リクエストが失敗しました。サーバーからの応答がありません"
+    }
+  }
+}

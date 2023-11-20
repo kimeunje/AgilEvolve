@@ -3,7 +3,7 @@
     <PageHeader />
     <div class="boards-container">
       <div class="boards-section">
-        <h2 class="section-title">Personal Boards</h2>
+        <h2 class="section-title">{{ $t('homePage.personalBoards') }}</h2>
         <div class="boards d-flex align-content-start flex-wrap">
           <div class="board list-inline-item" v-for="board in personalBoards" v-bind:key="board.id"
             @click="openBoard(board)">
@@ -14,7 +14,7 @@
           </div>
           <div class="board add list-inline-item" @click="createBoard(null)">
             <font-awesome-icon :icon="['fas', 'plus']" />
-            <div>Create New Board</div>
+            <div>{{ $t('homePage.createNewBoard') }}</div>
           </div>
         </div>
       </div>
@@ -30,12 +30,12 @@
           </div>
           <div class="board add list-inline-item" @click="createBoard(team)">
             <font-awesome-icon :icon="['fas', 'plus']" />
-            <div>Create New Board</div>
+            <div>{{ $t('homePage.createNewBoard') }}</div>
           </div>
         </div>
       </div>
       <div class="create-team-wrapper">
-        <button class="btn btn-link team-code" @click="createTeam()">+ Create New Team</button>
+        <button class="btn btn-link team-code" @click="createTeam()">+ {{ $t('homePage.createNewTeam') }}</button>
       </div>
     </div>
   </div>

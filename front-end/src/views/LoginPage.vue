@@ -8,23 +8,28 @@
             <div v-if="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
             <div class="form-group form-floating mb-3">
               <input type="text" class="form-control" id="username" placeholder="username" v-model="form.username">
-              <label for="username">Username or email address</label>
-              <div class="field-error" v-if="v$.form.username.$dirty">
-                <div class="error" v-if="v$.form.username.required.$invalid">Username or email address is required</div>
+              <label for="username">{{ t("loginPage.form.username.label") }}</label>
+              <div class="field-error" v-if="v$.username.$dirty">
+                <div class="error" v-if="v$.username.required.$invalid">{{ t("loginPage.form.username.required") }}
+                </div>
               </div>
             </div>
             <div class="form-group form-floating mb-3">
               <input type="password" class="form-control" id="password" placeholder="Password" v-model="form.password">
-              <label for="password">Password</label>
-              <div class="field-error" v-if="v$.form.password.$dirty">
-                <div class="error" v-if="v$.form.password.required.$invalid">Password is required</div>
+              <label for="password">{{ t("loginPage.form.password.label") }}</label>
+              <div class="field-error" v-if="v$.password.$dirty">
+                <div class="error" v-if="v$.password.required.$invalid">{{ t("loginPage.form.password.required") }}
+                </div>
               </div>
             </div>
-            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+            <button class="btn btn-primary w-100 py-2" type="submit">{{ t("loginPage.form.submit") }}</button>
             <div class="links">
-              <p class="sign-up text-muted">Don't have an account yet? <a href="/register" class="link-sign-up">Sign up
-                  here</a></p>
-              <p class="text-center mt-5 mb-3 text-body-secondary"><a href="#">Forgot your password?</a></p>
+              <p class="sign-up text-muted">{{ t("loginPage.form.noAccountYet") }}
+                <router-link to="/register" class="link-sign-up">{{ t("loginPage.form.signUpHere") }}</router-link>
+              </p>
+              <p class="text-center mt-5 mb-3 text-body-secondary">
+                <router-link to="#">{{ t("loginPage.form.forgotPassword") }}</router-link>
+              </p>
             </div>
           </form>
         </div>
@@ -35,8 +40,11 @@
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 
 import Logo from '@/components/Logo.vue'
 import PageFooter from '@/components/PageFooter.vue'
@@ -46,46 +54,45 @@ import authenticationService from '@/services/authentication'
 export default {
   name: 'LoginPage',
   setup() {
-    return { v$: useVuelidate() }
-  },
-  data: function () {
-    return {
-      form: {
-        username: '',
-        password: ''
-      },
-      errorMessage: ''
+    const router = useRouter()
+    const { t } = useI18n()
+
+    const form = ref({
+      username: '',
+      password: ''
+    })
+
+    const errorMessage = ref('')
+
+    const rules = {
+      username: { required },
+      password: { required }
     }
+
+    const v$ = useVuelidate(rules, form)
+
+
+    function submitForm() {
+      v$.value.$touch()
+      if (v$.value.$invalid) {
+        return
+      }
+
+      authenticationService.authenticate(form.value).then(() => {
+        router.push({ name: 'home' })
+      }).catch((error: Error) => {
+        errorMessage.value = error.message
+      })
+    }
+
+    return { v$, t, form, errorMessage, submitForm }
   },
   components: {
     Logo,
     PageFooter
-  },
-  validations() {
-    return {
-      form: {
-        username: { required },
-        password: { required }
-      }
-    }
-  },
-  methods: {
-    submitForm() {
-      this.v$.$touch()
-      if (this.v$.$invalid) {
-        return
-      }
-
-      authenticationService.authenticate(this.form).then(() => {
-        this.$router.push({ name: 'home' })
-      }).catch((error: Error) => {
-        this.errorMessage = error.message
-      })
-    }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
 .register-form {
@@ -98,4 +105,3 @@ export default {
   text-align: center;
 }
 </style>
-@/services/authentication/authentication

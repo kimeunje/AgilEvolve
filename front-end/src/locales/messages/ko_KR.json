@@ -1,0 +1,83 @@
+{
+  "logo": {
+    "tagLine": "오픈 소스 작업 관리 도구"
+  },
+  "header": {
+    "boardsMenu": {
+      "label": "보드",
+      "noBoard": "보드 없음",
+      "personalBoards": "개인 보드"
+    },
+    "search": "검색",
+    "profile": "프로필",
+    "signOut": "로그아웃"
+  },
+  "loginPage": {
+    "form": {
+      "username": {
+        "label": "사용자 이름 또는 이메일 주소",
+        "required": "사용자 이름 또는 이메일 주소는 필수입니다"
+      },
+      "password": {
+        "label": "비밀번호",
+        "required": "비밀번호는 필수입니다"
+      },
+      "submit": "로그인",
+      "noAccountYet": "아직 계정이 없으신가요?",
+      "signUpHere": "여기에서 가입하세요",
+      "forgotPassword": "비밀번호를 잊으셨나요?"
+    }
+  },
+  "registerPage": {
+    "form": {
+      "username": {
+        "label": "사용자 이름",
+        "required": "사용자 이름은 필수입니다",
+        "alphaNum": "사용자 이름은 문자와 숫자만 포함할 수 있습니다",
+        "minLength": "사용자 이름은 최소 {minLength}자 이상이어야 합니다.",
+        "maxLength": "사용자 이름이 너무 깁니다. 최대 {maxLength}자까지 입력할 수 있습니다."
+      },
+      "emailAddress": {
+        "label": "이메일 주소",
+        "required": "이메일 주소는 필수입니다",
+        "email": "유효한 이메일 주소가 아닙니다",
+        "maxLength": "이메일 주소가 너무 깁니다. 최대 {maxLength}자까지 입력할 수 있습니다."
+      },
+      "password": {
+        "label": "비밀번호",
+        "required": "비밀번호는 필수입니다",
+        "minLength": "비밀번호가 너무 짧습니다. 최소 {minLength}자 이상이어야 합니다.",
+        "maxLength": "비밀번호가 너무 깁니다. 최대 {maxLength}자까지 입력할 수 있습니다."
+      },
+      "submit": "계정 생성",
+      "terms": {
+        "accept": "“계정 생성”을 클릭함으로써 {termsOfService} 및 {privacyPolicy}에 동의합니다.",
+        "termsOfService": "서비스 약관",
+        "privacyPolicy": "개인 정보 보호 정책"
+      },
+      "alreadyHaveAccount": "이미 계정이 있으신가요?",
+      "signIn": "로그인"
+    }
+  },
+  "homePage": {
+    "personalBoards": "개인 보드",
+    "createNewBoard": "새 보드 생성",
+    "createNewTeam": "새 팀 생성"
+  },
+  "pageFooter": {
+    "about": "소개",
+    "termOfService": "서비스 약관",
+    "privacyPolicy": "개인 정보 보호 정책"
+  },
+  "error": {
+    "request": {
+      "bad": "잘못된 요청입니다.",
+      "notAuthorized": "요청이 승인되지 않았습니다.",
+      "forbidden": "요청이 금지되었습니다.",
+      "notFound": "요청이 실패했습니다. 서버에서 요청 엔드포인트를 찾을 수 없습니다.",
+      "unknownServerError": "서버 측에 오류가 발생했습니다. 나중에 다시 시도해주세요.",
+      "failed": "요청이 실패했습니다. 나중에 다시 시도해주세요.",
+      "noResponse": "요청이 실패했습니다. 서버로부터 응답이 없습니다."
+    }
+  }
+}

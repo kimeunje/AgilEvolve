@@ -4,6 +4,9 @@ import { mount, VueWrapper, DOMWrapper, flushPromises } from '@vue/test-utils'
 import LoginPage from '@/views/LoginPage.vue'
 import authenticationService from '@/services/authentication'
 
+import router from '@/router'
+import { i18n } from '@/locales'
+
 vi.mock('@/services/authentication')
 describe('LoginPage', () => {
   let wrapper: VueWrapper<any>
@@ -13,17 +16,15 @@ describe('LoginPage', () => {
   let authenticateSpy: SpyInstance
 
   beforeEach(() => {
-    const mockRouter = {
-      push: vi.fn()
-    }
-
     authenticateSpy = vi.spyOn(authenticationService, 'authenticate')
 
     wrapper = mount(LoginPage, {
       global: {
+        plugins: [i18n, router],
         mocks: {
-          $router: mockRouter
-        }
+          t: (tKey: string) => tKey
+        },
+        stubs: ['router-link', 'router-view']
       }
     })
 
@@ -41,18 +42,18 @@ describe('LoginPage', () => {
     vi.restoreAllMocks()
   })
 
-  it('로그인 폼을 렌더링해야 합니다.', () => {
-    expect(wrapper.find('.logo').attributes().src).toEqual('/static/images/logo.png')
-    expect(wrapper.find('.tagline').text()).toEqual('Open source task management tool')
+  it('로그인 폼을 렌더링해야 합니다.', async () => {
+    expect(wrapper.find('.logo').attributes().src).toEqual('/images/logo.png')
+    expect(wrapper.find('.tagline').text()).toEqual('logo.tagLine')
     expect((fieldUsername.element as HTMLInputElement).value).toEqual('')
     expect((fieldPassword.element as HTMLInputElement).value).toEqual('')
-    expect(buttonSubmit.text()).toEqual('Sign in')
-    expect(wrapper.find('.link-sign-up').attributes().href).toEqual('/register')
+    expect(buttonSubmit.text()).toEqual('loginPage.form.submit')
+    expect(wrapper.find('.link-sign-up').attributes().to).toEqual('/register')
     expect(wrapper.find('.link-forgot-password')).toBeTruthy()
   })
 
   it('초깃값을 갖는 데이터 모델을 포함해야 합니다.', () => {
-    const loginData = wrapper.vm.$data
+    const loginData = wrapper.vm
 
     expect(loginData.form.username).toEqual('')
     expect(loginData.form.password).toEqual('')
@@ -62,7 +63,7 @@ describe('LoginPage', () => {
     const username = 'sunny'
     const password = 'MyPassword123!'
 
-    const loginData = wrapper.vm.$data
+    const loginData = wrapper.vm
 
     loginData.form.username = username
     loginData.form.password = password
@@ -72,18 +73,20 @@ describe('LoginPage', () => {
     expect((fieldPassword.element as HTMLInputElement).value).toEqual(password)
   })
 
-  it('submitForm 폼 제출 핸들러를 가져야 합니다.', () => {
+  it('submitForm 폼 제출 핸들러를 가져야 합니다.', async () => {
     const submitFormSpy = vi.spyOn(wrapper.vm, 'submitForm')
 
-    buttonSubmit.trigger('submit')
+    await buttonSubmit.trigger('submit')
+    await wrapper.vm.$nextTick()
+
     expect(submitFormSpy).toHaveBeenCalled()
   })
 
   it('자격이 유효하면 성공해야 합니다.', async () => {
+    const loginData = wrapper.vm
     const submitFormFn = vi.fn()
-    const loginData = wrapper.vm.$data
 
-    wrapper.vm.$router.push = submitFormFn
+    router.push = submitFormFn
 
     loginData.form.username = 'sunny'
     loginData.form.password = 'MyPassword123!'
@@ -95,7 +98,7 @@ describe('LoginPage', () => {
   })
 
   it('자격이 유효하지 않으면 실패해야 합니다.', async () => {
-    const loginData = wrapper.vm.$data
+    const loginData = wrapper.vm
 
     // mock에서, 비밀번호는 `MyPassword123!` 와 일치해야 합니다.
     // 또한, 사용자명 `sunny` 또는 `sunny@taskagile.com` 만 유효합니다.
@@ -110,7 +113,7 @@ describe('LoginPage', () => {
   })
 
   it('유효하지 않은 데이터 제출을 방지하기 위한 검증이 존재해야 합니다.', () => {
-    const loginData = wrapper.vm.$data
+    const loginData = wrapper.vm
 
     wrapper.vm.submitForm()
     expect(authenticateSpy).not.toHaveBeenCalled()

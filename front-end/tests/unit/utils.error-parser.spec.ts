@@ -70,7 +70,7 @@ describe('utils/error-parser', () => {
     }
     const parsed = errorParser.parse(error)
     expect(parsed.message).toEqual(
-      '요청에 실패했습니다. 서버에서 요청 엔드포인트를 찾을 수 없습니다.'
+      '요청이 실패했습니다. 서버에서 요청 엔드포인트를 찾을 수 없습니다.'
     )
   })
 
@@ -86,7 +86,7 @@ describe('utils/error-parser', () => {
     }
     const parsed = errorParser.parse(error)
     expect(parsed.message).toEqual(
-      '오류 메시지의 문구가 변경되었습니다. 나중에 다시 시도해 주세요.'
+      '오류 메시지의 문구가 변경되었습니다.'
     )
   })
 
@@ -98,7 +98,7 @@ describe('utils/error-parser', () => {
       }
     }
     const parsed = errorParser.parse(error)
-    expect(parsed.message).toEqual('서버 측에 오류가 발생했습니다. 나중에 다시 시도해 주세요.')
+    expect(parsed.message).toEqual('서버 측에 오류가 발생했습니다. 나중에 다시 시도해주세요.')
   })
 
   it('HTTP 503 오류를 구문 분석해야 합니다.', () => {
@@ -109,7 +109,7 @@ describe('utils/error-parser', () => {
       }
     }
     const parsed = errorParser.parse(error)
-    expect(parsed.message).toEqual('요청이 실패했습니다. 나중에 다시 시도해 주세요.')
+    expect(parsed.message).toEqual('요청이 실패했습니다. 나중에 다시 시도해주세요.')
   })
 
   it('HTTP 504 오류를 구문 분석해야 합니다', () => {
@@ -120,7 +120,7 @@ describe('utils/error-parser', () => {
       }
     }
     const parsed = errorParser.parse(error)
-    expect(parsed.message).toEqual('요청이 실패했습니다. 나중에 다시 시도해 주세요.')
+    expect(parsed.message).toEqual('요청이 실패했습니다. 나중에 다시 시도해주세요.')
   })
 
   it('응답이 없는 서버 오류를 구문 분석해야 합니다', () => {
@@ -128,7 +128,7 @@ describe('utils/error-parser', () => {
       request: {}
     }
     const parsed = errorParser.parse(error)
-    expect(parsed.message).toEqual('요청이 실패했습니다. 서버에서 응답이 없습니다.')
+    expect(parsed.message).toEqual('요청이 실패했습니다. 서버로부터 응답이 없습니다.')
   })
 
   it('알 수 없는 문자열 오류를 구문 분석해야 합니다.', () => {

@@ -2,23 +2,23 @@
   <div class="page-header d-flex align-content-center">
     <div class="logo" @click="goHome()">
       <font-awesome-icon :icon="['fas', 'house']" class="home-icon" />
-      <img src="/static/images/logo.png">
+      <img src="/images/logo.png">
     </div>
     <div class="boards-menu-toggle">
       <div class="dropdown">
         <button class="btn dropdown-toggle" type="button" id="boardsMenu" data-bs-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
-          Boards
+          {{ t('header.boardsMenu.label') }}
         </button>
         <div class="dropdown-menu" aria-labelledby="boardsMenu">
-          <div v-show="!hasBoards" class="dropdown-item no-board">No boards</div>
+          <div v-show="!hasBoards" class="dropdown-item">{{ t('header.boardsMenu.noBoard') }}</div>
           <div v-show="hasBoards">
-            <h6 class="dropdown-header" v-show="personalBoards.length">Personal Boards</h6>
-            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)"
-              class="dropdown-item personal-board" type="button">{{ board.name }}</button>
+            <h6 class="dropdown-header" v-show="personalBoards.length">{{ t('header.boardsMenu.personalBoards') }}</h6>
+            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
+              type="button">{{ board.name }}</button>
             <div v-for="team in teamBoards" v-bind:key="'t' + team.id">
               <h6 class="dropdown-header">{{ team.name }}</h6>
-              <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item team-board"
+              <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
                 type="button">{{ board.name }}</button>
             </div>
           </div>
@@ -28,7 +28,7 @@
     <div class="search-box flex-fill">
       <div class="search-wrapper">
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
-        <input type="text" placeholder="Search" class="form-control form-control-sm" />
+        <input type="text" v-bind:placeholder="t('header.search')" class="form-control form-control-sm" />
       </div>
     </div>
     <div class="profile-menu-toggle">
@@ -38,8 +38,8 @@
           {{ getUser.name }}
         </button>
         <div class="dropdown-menu" aria-labelledby="profileMenu">
-          <button class="dropdown-item" type="button">Profile</button>
-          <button class="dropdown-item" type="button">Sign Out</button>
+          <button class="dropdown-item" type="button">{{ t('header.profile') }}</button>
+          <button class="dropdown-item" type="button">{{ t('header.signOut') }}</button>
         </div>
       </div>
     </div>
@@ -52,10 +52,14 @@ import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
+import { useI18n } from 'vue-i18n';
+
 
 const { getUser, hasBoards, personalBoards, teamBoards } = storeToRefs(useBoardUserStore())
 const { getMyData } = useBoardUserStore()
 const router = useRouter()
+
+const { t } = useI18n();
 
 onMounted(() => {
   getMyData()

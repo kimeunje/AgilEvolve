@@ -15,6 +15,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUserSecret, faHouse, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
 
+// 국제화(i18n) 설정
+import { i18n } from '@/locales'
+
 // axios 설정
 axios.defaults.baseURL = '/api'
 axios.defaults.headers.common.Accept = 'application/json'
@@ -30,6 +33,6 @@ library.add(faUserSecret, faHouse, faSearch, faPlus)
 const app = createApp(App)
 const pinia = createPinia()
 
-app.component('font-awesome-icon', FontAwesomeIcon).use(pinia).use(router)
+app.component('font-awesome-icon', FontAwesomeIcon).use(pinia).use(router).use(i18n)
 
 app.mount('#app')
