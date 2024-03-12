@@ -20,5 +20,14 @@ export default {
           }
         })
     })
+  },
+  signOut() {
+    return new Promise((resolve, reject) => {
+      axios.post('/me/logout').then(({ data }) => {
+        resolve(data)
+      }).catch((error) => {
+        reject(errorParser.parse(error))
+      })
+    })
   }
 }

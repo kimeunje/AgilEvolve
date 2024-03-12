@@ -14,8 +14,8 @@
           <div v-show="!hasBoards" class="dropdown-item">{{ t('header.boardsMenu.noBoard') }}</div>
           <div v-show="hasBoards">
             <h6 class="dropdown-header" v-show="personalBoards.length">{{ t('header.boardsMenu.personalBoards') }}</h6>
-            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
-              type="button">{{ board.name }}</button>
+            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)"
+              class="dropdown-item" type="button">{{ board.name }}</button>
             <div v-for="team in teamBoards" v-bind:key="'t' + team.id">
               <h6 class="dropdown-header">{{ team.name }}</h6>
               <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
@@ -33,13 +33,13 @@
     </div>
     <div class="profile-menu-toggle">
       <div class="dropdown">
-        <button class="btn dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
+        <button class="btn dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
           {{ getUser.name }}
         </button>
         <div class="dropdown-menu" aria-labelledby="profileMenu">
           <button class="dropdown-item" type="button">{{ t('header.profile') }}</button>
-          <button class="dropdown-item" type="button">{{ t('header.signOut') }}</button>
+          <button class="dropdown-item" type="button" @click="signOut()">{{ t('header.signOut') }}</button>
         </div>
       </div>
     </div>
@@ -53,7 +53,7 @@ import { storeToRefs } from 'pinia';
 
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
 import { useI18n } from 'vue-i18n';
-
+import meService from '@/services/me'
 
 const { getUser, hasBoards, personalBoards, teamBoards } = storeToRefs(useBoardUserStore())
 const { getMyData } = useBoardUserStore()
@@ -72,6 +72,16 @@ const goHome = () => {
 const openBoard = (board: { id: number }) => {
   router.push({ name: 'board', params: { boardId: board.id } })
 }
+
+const signOut = () => {
+  meService.signOut().then(() => {
+    router.push({ name: 'login' })
+  }).catch(error => {
+    console.log(error);
+  })
+
+}
+
 </script>
 
 <style lang="scss" scoped>

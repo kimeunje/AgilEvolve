@@ -56,7 +56,7 @@ public class SecurityConfiguration {
         .formLogin((form) -> form
             .loginPage("/login"))
         .logout((logout) -> logout
-            .logoutUrl("/logout")
+            .logoutUrl("/api/me/logout")
             .logoutSuccessHandler(logoutSuccessHandler()))
         .csrf((csrf) -> csrf.disable());
 
