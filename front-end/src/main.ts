@@ -13,7 +13,7 @@ import 'bootstrap/dist/js/bootstrap'
 // 폰트 아이콘 설정
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUserSecret, faHouse, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faHouse, faSearch, faPlus, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 
 // 국제화(i18n) 설정
 import { i18n } from '@/locales'
@@ -28,7 +28,7 @@ axios.interceptors.response.use(
   }
 )
 
-library.add(faUserSecret, faHouse, faSearch, faPlus)
+library.add(faUserSecret, faHouse, faSearch, faPlus, faUserPlus)
 
 const app = createApp(App)
 const pinia = createPinia()
