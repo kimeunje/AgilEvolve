@@ -2,6 +2,7 @@
 import PageHeader from '@/components/PageHeader.vue'
 import draggable from 'vuedraggable';
 import { nextTick, ref } from "vue";
+import { useEventListener } from '@vueuse/core'
 
 const board = { id: 0, name: '보드2', personal: false }
 const team = { name: '팀1' }
@@ -10,7 +11,6 @@ const addListForm = ref({
   open: false,
   name: ''
 })
-
 const cardLists = ref([
   {
     id: 1,
@@ -46,6 +46,30 @@ const cardLists = ref([
   }
 ])
 
+const pageElement = ref(null);
+
+useEventListener(pageElement, 'click', dismissActiveForms);
+
+function dismissActiveForms(event: any) {
+  let dismissAddCardForm = true
+  let dismissAddListForm = true
+  if (event.target.closest('.add-card-form') || event.target.closest('.add-card-button')) {
+    dismissAddCardForm = false
+  }
+  if (event.target.closest('.add-list-form') || event.target.closest('.add-list-button')) {
+    dismissAddListForm = false
+  }
+  if (dismissAddCardForm) {
+    cardLists.value.forEach((cardList: any) => { cardList.cardForm.open = false })
+  }
+  if (dismissAddListForm) {
+    addListForm.value.open = false
+  }
+}
+
+const focusCardTextArea = ref<HTMLTextAreaElement | null>(null)
+const focusListInput = ref<HTMLTextAreaElement | null>(null)
+
 const openAddMember = () => {
   // TODO 멤버 추가 로직 구현
 
@@ -54,7 +78,8 @@ const openAddMember = () => {
 const openAddListForm = () => {
   addListForm.value.open = true
   nextTick().then(() => {
-    // TODO 카드 리스트 포커스 이벤트
+    console.log(focusListInput)
+    focusListInput.value?.focus()
   })
 }
 
@@ -75,13 +100,13 @@ const openAddCardForm = (cardList: any) => {
 
   nextTick().then(() => {
     // TODO 카드 추가
-    focusCardForm(cardList)
+    focusCardForm()
   })
 }
 
-const focusCardForm = (cardList: any) => {
+const focusCardForm = () => {
   nextTick().then(() => {
-    // TODO 카드 폼 포커스 이벤트
+    focusCardTextArea.value?.focus()
   })
 }
 const closeAddCardForm = (cardList: any) => {
@@ -96,7 +121,7 @@ const addCard = () => {
 
 
 <template>
-  <div class="page">
+  <div class="page" ref="pageElement">
     <PageHeader />
     <div class="page-body">
       <div class="board-wrapper">
@@ -143,7 +168,7 @@ const addCard = () => {
                         <div class="add-card-form-wrapper" v-if="element.cardForm.open">
                           <form @submit.prevent="addCard()" class="add-card-form">
                             <div class="form-group">
-                              <textarea class="form-control" v-model="element.cardForm.title"
+                              <textarea ref="focusCardTextArea" class="form-control" v-model="element.cardForm.title"
                                 v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard()"
                                 placeholder="카드 제목을 입력해주세요."></textarea>
                             </div>
@@ -163,7 +188,7 @@ const addCard = () => {
                 <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트 추가하기</div>
                 <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form">
                   <div class="form-group">
-                    <input type="text" class="form-control" v-model="addListForm.name" id="cardListName"
+                    <input ref="focusListInput" type="text" class="form-control" v-model="addListForm.name" id="cardListName"
                       placeholder="이름을 작성해주세요." />
                   </div>
                   <button type="submit" class="btn btn-sm btn-primary">추가</button>

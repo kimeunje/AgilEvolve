@@ -25,6 +25,7 @@
     "@popperjs/core": "^2.11.8",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
+    "@vueuse/core": "^10.9.0",
     "bootstrap": "^5.3.1",
     "chance": "^1.1.11",
     "lodash": "^4.17.21",
