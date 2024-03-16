@@ -3,48 +3,15 @@ import PageHeader from '@/components/PageHeader.vue'
 import draggable from 'vuedraggable';
 import { nextTick, ref } from "vue";
 import { useEventListener } from '@vueuse/core'
+import cardListsService from '@/services/card-lists'
+import type { CardList } from '@/interfaces/card-list/CardLists'
+
 
 const board = { id: 0, name: '보드2', personal: false }
 const team = { name: '팀1' }
-const members: any[] = [{ id: "2", shortName: "k" }, { id: "3", shortName: "p" }, { id: "3", shortName: "d" }]
-const addListForm = ref({
-  open: false,
-  name: ''
-})
-const cardLists = ref([
-  {
-    id: 1,
-    name: '카드 리스트1',
-    cards: [
-      { id: 10, title: '카드1' },
-      { id: 20, title: '카드2' }],
-    cardForm: {
-      open: false,
-      name: ''
-    }
-  },
-  {
-    id: 2,
-    name: '카드 리스트2',
-    cards: [
-      { id: 10, title: '카드3' },
-      { id: 20, title: '카드4' },
-      { id: 30, title: '카드5' }],
-    cardForm: {
-      open: false,
-      name: ''
-    }
-  },
-  {
-    id: 3,
-    name: '카드 리스트3',
-    cards: [],
-    cardForm: {
-      open: false,
-      name: ''
-    }
-  }
-])
+const members: any = [{ id: "2", shortName: "k" }, { id: "3", shortName: "p" }, { id: "3", shortName: "d" }]
+const addListForm = ref({ open: false, name: '' })
+const cardLists = ref<CardList[]>([/* {id, name, cards, cardForm} */])
 
 const pageElement = ref(null);
 
@@ -68,17 +35,15 @@ function dismissActiveForms(event: any) {
 }
 
 const focusCardTextArea = ref<HTMLTextAreaElement | null>(null)
-const focusListInput = ref<HTMLTextAreaElement | null>(null)
+const focusListInput = ref<HTMLInputElement | null>(null)
 
 const openAddMember = () => {
   // TODO 멤버 추가 로직 구현
-
 }
 
 const openAddListForm = () => {
   addListForm.value.open = true
   nextTick().then(() => {
-    console.log(focusListInput)
     focusListInput.value?.focus()
   })
 }
@@ -89,7 +54,30 @@ const closeAddListForm = () => {
 }
 
 const addCardList = () => {
-  // TODO 카드리스트 추가
+  if (!addListForm.value.name) {
+    return
+  }
+
+  const cardList = {
+    boardId: board.id,
+    name: addListForm.value.name,
+    position: cardLists.value.length + 1
+  }
+
+  cardListsService.add(cardList).then((savedCardList) => {
+    cardLists.value.push({
+      id: savedCardList.id,
+      name: savedCardList.name,
+      cards: [],
+      cardForm: {
+        open: false,
+        name: ''
+      }
+    })
+    closeAddListForm()
+  }).catch(error => {
+    console.log(error);
+  })
 }
 
 const openAddCardForm = (cardList: any) => {
@@ -166,7 +154,7 @@ const addCard = () => {
                           추가하기
                         </div>
                         <div class="add-card-form-wrapper" v-if="element.cardForm.open">
-                          <form @submit.prevent="addCard()" class="add-card-form">
+                          <form @submit.prevent="addCard()" class="add-card-form" autocomplete="off">
                             <div class="form-group">
                               <textarea ref="focusCardTextArea" class="form-control" v-model="element.cardForm.title"
                                 v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard()"
@@ -186,10 +174,11 @@ const addCard = () => {
               </draggable>
               <div class="list-wrapper add-list">
                 <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트 추가하기</div>
-                <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form">
+                <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form"
+                  autocomplete="off">
                   <div class="form-group">
-                    <input ref="focusListInput" type="text" class="form-control" v-model="addListForm.name" id="cardListName"
-                      placeholder="이름을 작성해주세요." />
+                    <input ref="focusListInput" type="text" class="form-control" v-model="addListForm.name"
+                      id="cardListName" placeholder="이름을 작성해주세요." />
                   </div>
                   <button type="submit" class="btn btn-sm btn-primary">추가</button>
                   <button type="button" class="btn btn-sm btn-link btn-cancel" @click="closeAddListForm()">취소</button>
