@@ -7,7 +7,7 @@ import cardListsService from '@/services/card-lists'
 import type { CardList } from '@/interfaces/card-list/CardLists'
 
 
-const board = { id: 0, name: '보드2', personal: false }
+const board = { id: 1, name: '보드2', personal: false }
 const team = { name: '팀1' }
 const members: any = [{ id: "2", shortName: "k" }, { id: "3", shortName: "p" }, { id: "3", shortName: "d" }]
 const addListForm = ref({ open: false, name: '' })
