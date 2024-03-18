@@ -1,19 +1,46 @@
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
 import draggable from 'vuedraggable';
-import { nextTick, ref } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { useEventListener } from '@vueuse/core'
 import cardListsService from '@/services/card-lists'
 import type { CardList } from '@/interfaces/card-list/CardLists'
+import { useRoute } from 'vue-router';
+import boardService from '@/services/boards'
+import type { Member } from '@/interfaces/board/member';
 
-
-const board = { id: 1, name: '보드2', personal: false }
-const team = { name: '팀1' }
-const members: any = [{ id: "2", shortName: "k" }, { id: "3", shortName: "p" }, { id: "3", shortName: "d" }]
+const board = ref({ id: 0, personal: false, name: '' });
+const team = ref({ name: '' });
+const members = ref<Member[]>([]);
 const addListForm = ref({ open: false, name: '' })
 const cardLists = ref<CardList[]>([/* {id, name, cards, cardForm} */])
 
 const pageElement = ref(null);
+
+const route = useRoute();
+
+watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
+  if (newBoardId !== oldBoardId) {
+    try {
+      const data = await boardService.getBoard(parseInt(newBoardId as string));
+      team.value.name = data.team ? data.team.name : '';
+      board.value.id = data.board.id;
+      board.value.personal = data.board.personal;
+      board.value.name = data.board.name;
+      cardLists.value = data.cardLists.map(cardList => ({
+        id: cardList.id,
+        name: cardList.name,
+        cards: [],
+        cardForm: {
+          open: false,
+          title: ''
+        }
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}, { immediate: true });
 
 useEventListener(pageElement, 'click', dismissActiveForms);
 
@@ -59,7 +86,7 @@ const addCardList = () => {
   }
 
   const cardList = {
-    boardId: board.id,
+    boardId: board.value.id,
     name: addListForm.value.name,
     position: cardLists.value.length + 1
   }
@@ -71,7 +98,7 @@ const addCardList = () => {
       cards: [],
       cardForm: {
         open: false,
-        name: ''
+        title: ''
       }
     })
     closeAddListForm()

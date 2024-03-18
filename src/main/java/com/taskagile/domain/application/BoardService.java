@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.taskagile.domain.application.commands.CreateBoardCommand;
 import com.taskagile.domain.model.board.Board;
+import com.taskagile.domain.model.board.BoardId;
 import com.taskagile.domain.model.user.UserId;
 
 public interface BoardService {
@@ -18,7 +19,15 @@ public interface BoardService {
   List<Board> findBoardsByMembership(UserId userId);
 
   /**
-   * 새 보드 만들기
+   * 보드 id로 보드 검색
+   *
+   * @param boardId 보드 id
+   * @return 보드 인스턴스 또는 비어있는 값
+   */
+  Board findById(BoardId boardId);
+
+  /**
+   * 새 보드 저장
    *
    * @param command CreateBoardCommand 인스턴스
    * @return 방금 생성된 새 보드

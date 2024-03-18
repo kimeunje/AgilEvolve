@@ -1,7 +1,7 @@
 import axios from 'axios'
 import errorParser from '@/utils/error-parser'
 
-import type { Board, BoardDetail } from '@/interfaces/BoardInterface'
+import type { Board, BoardDetail, GetBoardRes } from '@/interfaces/BoardInterface'
 
 export default {
   /**
@@ -20,6 +20,19 @@ export default {
             reject(errorParser.parse(error))
           }
         })
+    })
+  },
+  /**
+   * 보드 및 보드에 소속되어 있는 모든 것을 조회
+   * @param {*} boardId 보드 id
+   */
+  getBoard(boardId: number): Promise<GetBoardRes> {
+    return new Promise((resolve, reject) => {
+      axios.get('/boards/' + boardId).then(({ data }) => {
+        resolve(data)
+      }).catch((error) => {
+        reject(errorParser.parse(error))
+      })
     })
   }
 }

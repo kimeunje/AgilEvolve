@@ -14,6 +14,14 @@ public interface TeamRepository {
   List<Team> findTeamsByUserId(UserId userId);
 
   /**
+   * 팀 id 로 팀 찾기
+   * 
+   * @param teamId 팀 id
+   * @return 팀 인스턴스 또는 빈 목록(못 찾을 경우)
+   */
+  Team findById(TeamId teamId);
+
+  /**
    * 팀을 저장합니다.
    *
    * @param team 저장할 팀

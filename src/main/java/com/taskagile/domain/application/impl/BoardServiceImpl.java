@@ -10,6 +10,7 @@ import com.taskagile.domain.application.BoardService;
 import com.taskagile.domain.application.commands.CreateBoardCommand;
 import com.taskagile.domain.common.event.DomainEventPublisher;
 import com.taskagile.domain.model.board.Board;
+import com.taskagile.domain.model.board.BoardId;
 import com.taskagile.domain.model.board.BoardManagement;
 import com.taskagile.domain.model.board.BoardRepository;
 import com.taskagile.domain.model.board.events.BoardCreatedEvent;
@@ -43,5 +44,10 @@ public class BoardServiceImpl implements BoardService {
         command.getTeamId());
     domainEventPublisher.publish(new BoardCreatedEvent(this, board));
     return board;
+  }
+
+  @Override
+  public Board findById(BoardId boardId) {
+    return boardRepository.findById(boardId);
   }
 }

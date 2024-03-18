@@ -16,6 +16,14 @@ public interface BoardRepository {
   List<Board> findBoardsByMembership(UserId userId);
 
   /**
+   * 보드 id로 보드 검색
+   *
+   * @param boardId 보드 id
+   * @return 보드 인스턴스 또는 비어있는 값
+   */
+  Board findById(BoardId boardId);
+
+  /**
    * 보드를 저장합니다.
    *
    * @param board 저장할 보드

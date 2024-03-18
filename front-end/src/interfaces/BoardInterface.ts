@@ -10,3 +10,28 @@ export interface BoardDetail {
   name: string
   description: string
 }
+
+export interface GetBoardRes {
+  team: {
+    name: string
+  },
+  board: {
+    name: string,
+    personal: boolean
+    id: number
+  },
+  members: [{
+    userId: number,
+    shortName: string
+  }],
+  cardLists: [{
+    id: number,
+    name: string,
+    position: number,
+    cards: [{
+      id: number,
+      title: string,
+      position: number
+    }]
+  }]
+}
