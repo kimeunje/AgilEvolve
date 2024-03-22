@@ -101,7 +101,7 @@ describe('LoginPage', () => {
     const loginData = wrapper.vm
 
     // mock에서, 비밀번호는 `MyPassword123!` 와 일치해야 합니다.
-    // 또한, 사용자명 `sunny` 또는 `sunny@taskagile.com` 만 유효합니다.
+    // 또한, 사용자명 `sunny` 또는 `sunny@agilevolve.com` 만 유효합니다.
     loginData.form.username = 'sunny'
     loginData.form.password = 'BadPassword'
 
@@ -124,7 +124,7 @@ describe('LoginPage', () => {
     expect(authenticateSpy).not.toHaveBeenCalled()
 
     // 이메일만 유효합니다.
-    loginData.form.username = 'sunny@taskagile.com'
+    loginData.form.username = 'sunny@agilevolve.com'
     wrapper.vm.submitForm()
     expect(authenticateSpy).not.toHaveBeenCalled()
 

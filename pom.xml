@@ -8,10 +8,10 @@
 		<version>3.1.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.taskagile</groupId>
+	<groupId>com.agilevolve</groupId>
 	<artifactId>app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>TaskAgile</name>
+	<name>AgilEvolve</name>
 	<description>Open source task management tool</description>
 	<properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

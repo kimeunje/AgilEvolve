@@ -9,7 +9,7 @@ describe('services/registration', () => {
 
   const loginDetail = {
     username: 'sunny',
-    emailAddress: 'sunny@taskagile.com',
+    emailAddress: 'sunny@agilevolve.com',
     password: 'MyPassword123!'
   }
 

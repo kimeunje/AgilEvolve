@@ -1,21 +1,28 @@
-# TaskAgile
+# AgilEvolve
 
-Open source task management tool built with Vue.js 3, Spring Boot 3, and MySQL 11.0+
+오픈 소스 작업 관리 도구
+built with Vue.js 3, Spring Boot 3, and MySQL 8.0+
 
 ## Local development
 
-Create `src/main/resources/application-dev.properties` with the following settings to override the settings in `application.properties`.
+`application.properties`의 설정을 덮어쓴 `src/main/resources/application-dev.properties`파일을 생성해주세요.
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/task_agile?useSSL=false
-spring.datasource.username=<your username>
-spring.datasource.password=<your password>
+// DB
+spring.datasource.url=<your DB address>
+spring.datasource.username=<your DB username>
+spring.datasource.password=<your DB password>
+
+// smtp
+spring.mail.username=<your gmail smtp username>
+spring.mail.password=<your gmail smtp password>
 ```
 
 ## Commands
 
-- Use `mvn install` to build both the front-end and the back-end
-- Use `mvn test` to run the tests of the back-end and the front-end
-- Use `mvn spring-boot:run` to start the back-end
-- Use `npm run serve` inside the `front-end` directory to start the front-end
-- Use `java -jar target/app-0.0.1-SNAPSHOT.jar` to start the bundled application
+- Use `mvn install` 백엔드 및 프런트엔드 빌드
+- Use `mvn test` 백엔드 및 프런트엔드 테스트
+- Use `mvn spring-boot:run` 백엔드 개발 서버 실행
+- Use `npm run dev` 프런트엔드 개발 서버 실행  
+** `front-end` 폴더에서 실행
+- Use `java -jar target/app-0.0.1-SNAPSHOT.jar` 백엔드 및 프런트엔드 배포

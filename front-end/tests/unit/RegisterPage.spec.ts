@@ -92,7 +92,7 @@ describe('RegisterPage', () => {
     router.push = submitFormSpy
 
     registerData.form.username = 'sunny'
-    registerData.form.emailAddress = 'sunny@taskagile.com'
+    registerData.form.emailAddress = 'sunny@agilevolve.com'
     registerData.form.password = '@MyPassword123'
 
     wrapper.vm.submitForm()
@@ -106,7 +106,7 @@ describe('RegisterPage', () => {
 
     const RegisterData = wrapper.vm
     RegisterData.form.username = 'ted'
-    RegisterData.form.emailAddress = 'ted@taskagile.com'
+    RegisterData.form.emailAddress = 'ted@agilevolve.com'
     RegisterData.form.password = 'JestRocks!'
 
     expect(wrapper.find('.failed').exists()).toBe(false)
@@ -119,7 +119,7 @@ describe('RegisterPage', () => {
   it('이메일 주소가 유효하지 않을 경우 회원가입을 할 수 없어야 합니다.', () => {
     const RegisterData = wrapper.vm
     RegisterData.form.username = 'test'
-    RegisterData.form.emailAddress = 'test@taskagile'
+    RegisterData.form.emailAddress = 'test@agilevolve'
     RegisterData.form.password = 'abcdefg!'
     wrapper.vm.submitForm()
     expect(registerSpy).not.toHaveBeenCalled()
@@ -128,7 +128,7 @@ describe('RegisterPage', () => {
   it('아이디가 유효하지 않을 경우 회원가입을 할 수 없어야 합니다.', () => {
     const RegisterData = wrapper.vm
     RegisterData.form.username = 'a'
-    RegisterData.form.emailAddress = 'test@taskagile.com'
+    RegisterData.form.emailAddress = 'test@agilevolve.com'
     RegisterData.form.password = 'abcdefg!'
     wrapper.vm.submitForm()
     expect(registerSpy).not.toHaveBeenCalled()
@@ -137,7 +137,7 @@ describe('RegisterPage', () => {
   it('비밀번호가 유효하지 않을 경우 회원가입을 할 수 없어야 합니다.', () => {
     const RegisterData = wrapper.vm
     RegisterData.form.username = 'test'
-    RegisterData.form.emailAddress = 'test@taskagile.com'
+    RegisterData.form.emailAddress = 'test@agilevolve.com'
     RegisterData.form.password = 'abc3333'
     wrapper.vm.submitForm()
     expect(registerSpy).not.toHaveBeenCalled()

@@ -2,7 +2,7 @@
   <footer class="footer pt-4 my-md-5 pt-md-5 border-top">
     <div class="row">
       <div class="col-6 col-md">
-        <span class="copyright">&copy; 2023 TaskAgile.com</span>
+        <span class="copyright">&copy; 2024 AgilEvolve.com</span>
         <ul class="footer-links list-unstyled text-small list-inline float-md-end">
           <li class="mb-1 list-inline-item"><a class="link-secondary" href="#">{{ $t('pageFooter.about') }}</a></li>
           <li class="mb-1 list-inline-item"><a class="link-secondary" href="#">{{ $t("pageFooter.termOfService") }}</a>
