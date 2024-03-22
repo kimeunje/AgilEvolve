@@ -35,7 +35,7 @@ public class RegistrationPayloadTests {
   public void validate_blankPayload_shouldFail() {
     RegistrationPayload payload = new RegistrationPayload();
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
-    assertEquals(3, violations.size());
+    assertEquals(4, violations.size());
   }
 
   @Test
@@ -43,7 +43,7 @@ public class RegistrationPayloadTests {
     RegistrationPayload payload = new RegistrationPayload();
     payload.setEmailAddress("BadEmailAddress");
     payload.setUsername("MyUsername");
-    payload.setPassword("MyPassword");
+    payload.setPassword("MyPassword@");
 
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
     assertEquals(1, violations.size());
@@ -61,7 +61,7 @@ public class RegistrationPayloadTests {
     RegistrationPayload payload = new RegistrationPayload();
     payload.setEmailAddress(localPart + "@" + domain + ".com");
     payload.setUsername("MyUsername");
-    payload.setPassword("MyPassword");
+    payload.setPassword("MyPassword@");
 
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
     assertEquals(1, violations.size());
@@ -72,7 +72,7 @@ public class RegistrationPayloadTests {
     RegistrationPayload payload = new RegistrationPayload();
     String usernameTooShort = RandomStringUtils.random(1);
     payload.setUsername(usernameTooShort);
-    payload.setPassword("MyPassword");
+    payload.setPassword("MyPassword@");
     payload.setEmailAddress("sunny@taskagile.com");
 
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
@@ -84,7 +84,7 @@ public class RegistrationPayloadTests {
     RegistrationPayload payload = new RegistrationPayload();
     String usernameTooLong = RandomStringUtils.random(51);
     payload.setUsername(usernameTooLong);
-    payload.setPassword("MyPassword");
+    payload.setPassword("MyPassword@");
     payload.setEmailAddress("sunny@taskagile.com");
 
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
@@ -94,8 +94,8 @@ public class RegistrationPayloadTests {
   @Test
   public void validate_payloadWithPasswordShorterThan6_shouldFail() {
     RegistrationPayload payload = new RegistrationPayload();
-    String passwordTooShort = RandomStringUtils.random(5);
-    payload.setPassword(passwordTooShort);
+    String passwordTooShort = RandomStringUtils.random(4);
+    payload.setPassword(passwordTooShort + "@");
     payload.setUsername("MyUsername");
     payload.setEmailAddress("sunny@taskagile.com");
 
@@ -107,9 +107,20 @@ public class RegistrationPayloadTests {
   public void validate_payloadWithPasswordLongerThan30_shouldFail() {
     RegistrationPayload payload = new RegistrationPayload();
     String passwordTooLong = RandomStringUtils.random(31);
-    payload.setPassword(passwordTooLong);
+    payload.setPassword(passwordTooLong + "@");
     payload.setUsername("MyUsername");
     payload.setEmailAddress("sunny@taskagile.com");
+
+    Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
+    assertEquals(1, violations.size());
+  }
+
+  @Test
+  public void validate_payloadWithoutSpecialCharacterPassword_shouldFail() {
+    RegistrationPayload payload = new RegistrationPayload();
+    payload.setPassword("MyPassword");
+    payload.setUsername("MyUsername");
+    payload.setEmailAddress("sunny@agilevolve.com");
 
     Set<ConstraintViolation<RegistrationPayload>> violations = validator.validate(payload);
     assertEquals(1, violations.size());

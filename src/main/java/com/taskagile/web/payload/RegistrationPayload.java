@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import com.taskagile.domain.application.commands.RegistrationCommand;
+import com.taskagile.web.validation.ContainsSpecialCharacter;
+
 /**
  * 회원가입에 사용되는 데이터를 담고 있는 객체
  *
@@ -22,6 +24,7 @@ public class RegistrationPayload {
 
   @Size(min = 6, max = 30, message = "비밀번호는 6글자와 30글자 사이여야 합니다.")
   @NotNull
+  @ContainsSpecialCharacter
   private String password;
 
   public RegistrationCommand toCommand() {

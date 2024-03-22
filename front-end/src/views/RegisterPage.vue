@@ -15,11 +15,11 @@
                 <div class="error" v-if="v$.form.username.alphaNum.$invalid">
                   {{ t('registerPage.form.username.alphaNum') }}</div>
                 <div class="error" v-if="v$.form.username.minLength.$invalid">{{
-                  t('registerPage.form.username.minLength',
-                    { minLength: v$.form.username.minLength.$params.min }) }}</div>
+            t('registerPage.form.username.minLength',
+              { minLength: v$.form.username.minLength.$params.min }) }}</div>
                 <div class="error" v-if="v$.form.username.maxLength.$invalid">{{
-                  t('registerPage.form.username.maxLength',
-                    { maxLength: v$.form.username.maxLength.$params.max }) }}</div>
+            t('registerPage.form.username.maxLength',
+              { maxLength: v$.form.username.maxLength.$params.max }) }}</div>
               </div>
             </div>
             <div class="form-group form-floating mb-3">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="error" v-if="v$.form.emailAddress.maxLength.$invalid">
                   {{ t('registerPage.form.emailAddress.maxLength',
-                    { maxLength: v$.form.emailAddress.maxLength.$params.max }) }}</div>
+            { maxLength: v$.form.emailAddress.maxLength.$params.max }) }}</div>
               </div>
             </div>
             <div class="form-group form-floating mb-3">
@@ -44,13 +44,16 @@
                 <div class="error" v-if="v$.form.password.required.$invalid">
                   {{ t('registerPage.form.password.required') }}
                 </div>
-                <div class="error" v-if="v$.form.password.minLength.$invalid">
+                <div class="error" v-else-if="v$.form.password.minLength.$invalid">
                   {{ t('registerPage.form.password.minLength',
-                    { minLength: v$.form.password.minLength.$params.min }) }}
+            { minLength: v$.form.password.minLength.$params.min }) }}
                 </div>
-                <div class="error" v-if="v$.form.password.maxLength.$invalid">
+                <div class="error" v-else-if="v$.form.password.maxLength.$invalid">
                   {{ t('registerPage.form.password.maxLength',
-                    { maxLength: v$.form.password.maxLength.$params.max }) }}
+            { maxLength: v$.form.password.maxLength.$params.max }) }}
+                </div>
+                <div class="error" v-else-if="v$.form.password.containsSpecialCharacter.$invalid">
+                  비밀번호에 특수 문자를 1개 이상 포함시켜주세요.
                 </div>
               </div>
             </div>
@@ -79,7 +82,7 @@
 <script setup lang="ts">
 import router from '@/router'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, minLength, maxLength, alphaNum } from '@vuelidate/validators'
+import { required, email, minLength, maxLength, alphaNum, helpers } from '@vuelidate/validators'
 
 import { setLocale } from "@/locales"
 import registrationService from '@/services/registration'
@@ -98,11 +101,13 @@ const form = ref({
   password: ''
 })
 
+const containsSpecialCharacter = helpers.regex(/^(?=.*[!@#$%^&*()_+]).*$/)
+
 const validations = {
   form: {
     username: { required, minLength: minLength(2), maxLength: maxLength(50), alphaNum },
     emailAddress: { required, email, maxLength: maxLength(100) },
-    password: { required, minLength: minLength(6), maxLength: maxLength(30) }
+    password: { required, minLength: minLength(6), maxLength: maxLength(30), containsSpecialCharacter }
   }
 };
 

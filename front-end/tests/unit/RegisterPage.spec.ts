@@ -93,7 +93,7 @@ describe('RegisterPage', () => {
 
     registerData.form.username = 'sunny'
     registerData.form.emailAddress = 'sunny@taskagile.com'
-    registerData.form.password = 'VitestRocks!'
+    registerData.form.password = '@MyPassword123'
 
     wrapper.vm.submitForm()
     expect(registerSpy).toBeCalled()
@@ -138,7 +138,7 @@ describe('RegisterPage', () => {
     const RegisterData = wrapper.vm
     RegisterData.form.username = 'test'
     RegisterData.form.emailAddress = 'test@taskagile.com'
-    RegisterData.form.password = 'abc!'
+    RegisterData.form.password = 'abc3333'
     wrapper.vm.submitForm()
     expect(registerSpy).not.toHaveBeenCalled()
   })
