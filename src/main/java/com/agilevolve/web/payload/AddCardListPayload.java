@@ -25,4 +25,17 @@ public class AddCardListPayload {
     public void setPosition(int position) {
         this.position = position;
     }
+
+    public long getBoardId() {
+        return this.boardId;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getPosition() {
+        return this.position;
+    }
+
 }

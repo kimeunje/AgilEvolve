@@ -32,4 +32,16 @@ public class CreateBoardPayload {
     this.teamId = teamId;
   }
 
+  public String getName() {
+    return this.name;
+  }
+
+  public String getDescription() {
+    return this.description;
+  }
+
+  public long getTeamId() {
+    return this.teamId;
+  }
+
 }
