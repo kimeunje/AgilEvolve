@@ -5,44 +5,54 @@
       <img src="/images/logo.png">
     </div>
     <div class="boards-menu-toggle">
-      <div class="dropdown">
-        <button class="btn dropdown-toggle" type="button" id="boardsMenu" data-bs-toggle="dropdown" aria-haspopup="true"
-          aria-expanded="false">
-          {{ t('header.boardsMenu.label') }}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="boardsMenu">
-          <div v-show="!hasBoards" class="dropdown-item">{{ t('header.boardsMenu.noBoard') }}</div>
-          <div v-show="hasBoards">
-            <h6 class="dropdown-header" v-show="personalBoards.length">{{ t('header.boardsMenu.personalBoards') }}</h6>
-            <button v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)"
-              class="dropdown-item" type="button">{{ board.name }}</button>
-            <div v-for="team in teamBoards" v-bind:key="'t' + team.id">
-              <h6 class="dropdown-header">{{ team.name }}</h6>
-              <button v-for="board in team.boards" v-bind:key="board.id" @click="openBoard(board)" class="dropdown-item"
-                type="button">{{ board.name }}</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <v-menu class="text-body-2">
+        <template v-slot:activator="{ props }">
+          <v-btn variant="text" append-icon="$menuDown" v-bind="props">
+            {{ t('header.boardsMenu.label') }}
+          </v-btn>
+        </template>
+        <v-card class="px-2 rounded-lg">
+          <v-list density="compact" v-show="!hasBoards">{{ t('header.boardsMenu.noBoard') }}</v-list>
+          <v-list density="compact" v-show="hasBoards">
+            <v-list-subheader v-show="personalBoards.length">
+              {{ t('header.boardsMenu.personalBoards') }}
+            </v-list-subheader>
+            <v-list-item v-for="board in personalBoards" v-bind:key="board.id" @click="openBoard(board)" type="button">
+              {{ board.name }}
+            </v-list-item>
+          </v-list>
+          <v-list density="compact" v-show="hasBoards" v-for="team in teamBoards" v-bind:key="'t' + team.id">
+            <v-list-subheader>{{ team.name }}</v-list-subheader>
+            <v-list-item density="compact" v-show="team.boards.length" v-for="board in team.boards"
+              v-bind:key="board.id" @click="openBoard(board)" type="button">
+              {{ board.name }}
+            </v-list-item>
+            <v-list-item :disabled="true" v-show="!team.boards.length">
+              {{ "<비어 있음>" }}
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-menu>
     </div>
+
     <div class="search-box flex-fill">
       <div class="search-wrapper">
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
         <input type="text" v-bind:placeholder="t('header.search')" class="form-control form-control-sm" />
       </div>
     </div>
-    <div class="profile-menu-toggle">
-      <div class="dropdown">
-        <button class="btn dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+
+    <v-menu class="text-body-2">
+      <template v-slot:activator="{ props }">
+        <v-btn variant="text" append-icon="$menuDown" id="profileMenu" v-bind="props">
           {{ getUser.name }}
-        </button>
-        <div class="dropdown-menu" aria-labelledby="profileMenu">
-          <button class="dropdown-item" type="button">{{ t('header.profile') }}</button>
-          <button class="dropdown-item" type="button" @click="signOut()">{{ t('header.signOut') }}</button>
-        </div>
-      </div>
-    </div>
+        </v-btn>
+      </template>
+      <v-list density="compact">
+        <v-list-item>{{ t('header.profile') }}</v-list-item>
+        <v-list-item color="#033" type="button" @click="signOut()">{{ t('header.signOut') }}</v-list-item>
+      </v-list>
+    </v-menu>
   </div>
 </template>
 
