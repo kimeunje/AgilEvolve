@@ -6,6 +6,8 @@ import { createTestingPinia } from '@pinia/testing'
 import { i18n } from '@/locales'
 import router from '@/router'
 
+import { vuetify } from '@/vuetify'
+
 describe('HomePage', () => {
   let wrapper: VueWrapper<any>
   let store: ReturnType<typeof useBoardUserStore>
@@ -13,7 +15,7 @@ describe('HomePage', () => {
   beforeEach(() => {
     wrapper = mount(HomePage, {
       global: {
-        plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n, router],
+        plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n, router, vuetify],
         mocks: {
           t: (msg: string) => msg
         },

@@ -7,6 +7,8 @@ import authenticationService from '@/services/authentication'
 import router from '@/router'
 import { i18n } from '@/locales'
 
+import { vuetify } from '@/vuetify'
+
 vi.mock('@/services/authentication')
 describe('LoginPage', () => {
   let wrapper: VueWrapper<any>
@@ -20,7 +22,7 @@ describe('LoginPage', () => {
 
     wrapper = mount(LoginPage, {
       global: {
-        plugins: [i18n, router],
+        plugins: [i18n, router, vuetify],
         mocks: {
           t: (tKey: string) => tKey
         },

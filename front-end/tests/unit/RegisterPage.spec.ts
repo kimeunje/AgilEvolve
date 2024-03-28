@@ -6,6 +6,8 @@ import registrationService from '@/services/registration'
 import { i18n } from '@/locales'
 import router from '@/router'
 
+import { vuetify } from '@/vuetify'
+
 vi.mock('@/services/registration')
 describe('RegisterPage', () => {
   let wrapper: VueWrapper<any>
@@ -20,7 +22,7 @@ describe('RegisterPage', () => {
 
     wrapper = mount(RegisterPage, {
       global: {
-        plugins: [i18n, router],
+        plugins: [i18n, router, vuetify],
         mocks: {
           t: (tKey: string) => tKey
         },

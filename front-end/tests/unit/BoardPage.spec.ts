@@ -9,6 +9,8 @@ import router from '@/router'
 import BoardPage from '@/views/BoardPage.vue'
 import { nextTick } from 'vue'
 
+import { vuetify } from '@/vuetify'
+
 vi.mock('@/services/card-lists')
 describe('BoardPage', () => {
     let wrapper: VueWrapper<any>
@@ -17,7 +19,7 @@ describe('BoardPage', () => {
     beforeEach(() => {
         wrapper = mount(BoardPage, {
             global: {
-                plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n, router],
+                plugins: [createTestingPinia({ createSpy: vi.fn, stubActions: true }), i18n, router, vuetify],
                 mocks: {
                     t: (msg: string) => msg
                 },
