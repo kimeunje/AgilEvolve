@@ -3,6 +3,7 @@ package com.agilevolve.domain.application;
 import java.util.List;
 
 import com.agilevolve.domain.application.commands.AddCardListCommand;
+import com.agilevolve.domain.application.commands.ChangeCardListPositionsCommand;
 import com.agilevolve.domain.model.board.BoardId;
 import com.agilevolve.domain.model.cardlist.CardList;
 
@@ -23,4 +24,11 @@ public interface CardListService {
      * @return 새로 추가된 카드 리스트
      */
     CardList addCardList(AddCardListCommand command);
+
+    /**
+     * 카드 리스트 포지션 변경
+     * 
+     * @param command 커멘드 인스턴스
+     */
+    void changePositions(ChangeCardListPositionsCommand command);
 }

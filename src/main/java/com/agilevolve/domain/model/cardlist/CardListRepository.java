@@ -20,4 +20,11 @@ public interface CardListRepository {
      * @param cardList 저장할 카드리스트
      */
     void save(CardList cardList);
+
+    /**
+     * 카드 리스트 포지션 변경
+     * 
+     * @param cardListPositions 카드 리스트의 포지션들
+     */
+    void changePositions(List<CardListPosition> cardListPositions);
 }

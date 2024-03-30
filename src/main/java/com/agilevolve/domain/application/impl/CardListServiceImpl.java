@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.agilevolve.domain.application.CardListService;
 import com.agilevolve.domain.application.commands.AddCardListCommand;
+import com.agilevolve.domain.application.commands.ChangeCardListPositionsCommand;
 import com.agilevolve.domain.common.event.DomainEventPublisher;
 import com.agilevolve.domain.model.board.BoardId;
 import com.agilevolve.domain.model.cardlist.CardList;
@@ -37,5 +38,10 @@ public class CardListServiceImpl implements CardListService {
 
         cardListRepository.save(cardList);
         return cardList;
+    }
+
+    @Override
+    public void changePositions(ChangeCardListPositionsCommand command) {
+        cardListRepository.changePositions(command.getCardListPositions());
     }
 }

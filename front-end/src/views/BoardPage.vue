@@ -4,7 +4,7 @@ import AddMemberModal from '@/modals/AddMemberModal.vue'
 import draggable from 'vuedraggable';
 import { nextTick, ref, watch } from "vue";
 import { useEventListener } from '@vueuse/core'
-import cardListsService from '@/services/card-lists'
+import cardListService from '@/services/card-lists'
 import type { CardList } from '@/interfaces/card-list/CardLists'
 import { useRoute } from 'vue-router';
 import boardService from '@/services/boards'
@@ -37,6 +37,11 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
           shortName: member.shortName
         })
       })
+
+      data.cardLists.sort((list1, list2) => {
+        return list1.position - list2.position
+      })
+
       cardLists.value = data.cardLists.map(cardList => ({
         id: cardList.id,
         name: cardList.name,
@@ -110,7 +115,7 @@ const addCardList = () => {
     position: cardLists.value.length + 1
   }
 
-  cardListsService.add(cardList).then((savedCardList) => {
+  cardListService.add(cardList).then((savedCardList) => {
     cardLists.value.push({
       id: savedCardList.id,
       name: savedCardList.name,
@@ -151,6 +156,31 @@ const closeAddCardForm = (cardList: any) => {
 const addCard = () => {
   // TODO 카드 추가 로직
 }
+
+const onCardListDragEnded = (event: Event) => {
+  interface CardListPosition {
+    cardListId: number;
+    position: number;
+  }
+
+  const positionChanges = {
+    boardId: board.value.id,
+    cardListPositions: [] as CardListPosition[]
+  }
+
+  cardLists.value.forEach((cardList, index) => {
+
+    positionChanges.cardListPositions.push({
+      cardListId: cardList.id,
+      position: index + 1
+    })
+  })
+
+  cardListService.changePositions(positionChanges).catch(error => {
+    console.log(error);
+  })
+
+}
 </script>
 
 
@@ -180,7 +210,7 @@ const addCard = () => {
           <div class="board-body">
             <div class="list-container">
               <draggable style="display: flex;" v-model="cardLists" handle=".list-header" :animation=0
-                :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name">
+                :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name" @end="onCardListDragEnded">
                 <template #item="{ element }">
                   <div class="draggable-wrapper">
                     <div class="list-wrapper">
