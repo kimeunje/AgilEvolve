@@ -23,6 +23,14 @@ public interface UserRepository {
   User findByEmailAddress(String emailAddress);
 
   /**
+   * 유저id로 사용자 찾기
+   * 
+   * @param userId 유저 id
+   * @return 유저 객체 또는 찾지 못할 경우 null 반환
+   */
+  User findById(UserId userId);
+
+  /**
    * 새로운 사용자 또는 존재하는 사용자 정보 저장
    *
    * @param user 저장된 유저 인스턴스

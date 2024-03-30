@@ -23,6 +23,20 @@ export default {
     })
   },
   /**
+ * 보드에 사용자 추가
+ * @param {*} boardId 보드 id
+ * @param {*} usernameOrEmailAddress 사용자 이메일 또는 사용자명
+ */
+  addMember(boardId: number | undefined, usernameOrEmailAddress: string) {
+    return new Promise((resolve, reject) => {
+      axios.post('/boards/' + boardId + '/members', { usernameOrEmailAddress }).then(({ data }) => {
+        resolve(data)
+      }).catch((error) => {
+        reject(errorParser.parse(error))
+      })
+    })
+  },
+  /**
    * 보드 및 보드에 소속되어 있는 모든 것을 조회
    * @param {*} boardId 보드 id
    */

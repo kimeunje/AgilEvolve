@@ -97,6 +97,10 @@ public class User extends AbstractBaseEntity {
     return lastName;
   }
 
+  public String getInitials() {
+    return (username.substring(0, 2)).toUpperCase();
+  }
+
   public Date getCreatedDate() {
     return createdDate;
   }

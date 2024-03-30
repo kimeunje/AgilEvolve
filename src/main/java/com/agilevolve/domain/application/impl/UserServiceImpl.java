@@ -16,6 +16,7 @@ import com.agilevolve.domain.model.user.RegistrationException;
 import com.agilevolve.domain.model.user.RegistrationManagement;
 import com.agilevolve.domain.model.user.SimpleUser;
 import com.agilevolve.domain.model.user.User;
+import com.agilevolve.domain.model.user.UserId;
 import com.agilevolve.domain.model.user.UserRepository;
 import com.agilevolve.domain.model.user.events.UserRegisteredEvent;
 
@@ -39,6 +40,11 @@ public class UserServiceImpl implements UserService {
     this.domainEventPublisher = domainEventPublisher;
     this.mailManager = mailManager;
     this.userRepository = userRepository;
+  }
+
+  @Override
+  public User findById(UserId userId) {
+    return userRepository.findById(userId);
   }
 
   @Override

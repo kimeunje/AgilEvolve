@@ -20,6 +20,8 @@ import com.agilevolve.domain.model.cardlist.CardList;
 import com.agilevolve.domain.model.team.Team;
 import com.agilevolve.domain.model.user.SimpleUser;
 import com.agilevolve.domain.model.user.User;
+import com.agilevolve.domain.model.user.UserNotFoundException;
+import com.agilevolve.web.payload.AddBoardMemberPayload;
 import com.agilevolve.web.payload.CreateBoardPayload;
 import com.agilevolve.web.results.ApiResult;
 import com.agilevolve.web.results.BoardResult;
@@ -53,6 +55,7 @@ public class BoardApiController {
     if (board == null) {
       return Result.notFound();
     }
+    List<User> members = boardService.findMembers(boardId);
 
     Team team = null;
     if (!board.isPersonal()) {
@@ -61,7 +64,30 @@ public class BoardApiController {
 
     List<CardList> cardLists = cardListService.findByBoardId(boardId);
 
-    return BoardResult.build(team, board, cardLists);
+    return BoardResult.build(team, board, members, cardLists);
+  }
+
+  @PostMapping("/api/boards/{boardId}/members")
+  public ResponseEntity<ApiResult> addMember(@PathVariable("boardId") long rawBoardId,
+      @RequestBody AddBoardMemberPayload payload) {
+
+    BoardId boardId = new BoardId(rawBoardId);
+    Board board = boardService.findById(boardId);
+
+    if (board == null) {
+      return Result.notFound();
+    }
+
+    try {
+      User member = boardService.addMember(boardId, payload.getUsernameOrEmailAddress());
+
+      ApiResult apiResult = ApiResult.blank()
+          .add("id", member.getId().value())
+          .add("shortName", member.getInitials());
+      return Result.ok(apiResult);
+    } catch (UserNotFoundException e) {
+      return Result.failure("유저를 찾을 수 없습니다.");
+    }
   }
 
 }

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PageHeader from '@/components/PageHeader.vue'
+import AddMemberModal from '@/modals/AddMemberModal.vue'
 import draggable from 'vuedraggable';
 import { nextTick, ref, watch } from "vue";
 import { useEventListener } from '@vueuse/core'
@@ -19,6 +20,8 @@ const pageElement = ref(null);
 
 const route = useRoute();
 
+const showModal = ref(false);
+
 watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
   if (newBoardId !== oldBoardId) {
     try {
@@ -27,6 +30,13 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
       board.value.id = data.board.id;
       board.value.personal = data.board.personal;
       board.value.name = data.board.name;
+
+      data.members.forEach(member => {
+        members.value.push({
+          id: member.userId,
+          shortName: member.shortName
+        })
+      })
       cardLists.value = data.cardLists.map(cardList => ({
         id: cardList.id,
         name: cardList.name,
@@ -66,6 +76,15 @@ const focusListInput = ref<HTMLInputElement | null>(null)
 
 const openAddMember = () => {
   // TODO 멤버 추가 로직 구현
+  showModal.value = true;
+}
+
+const boardModalClose = () => {
+  showModal.value = false;
+}
+
+const onMemberAdded = (member: { id: number; shortName: string; }) => {
+  members.value.push(member)
 }
 
 const openAddListForm = () => {
@@ -219,7 +238,7 @@ const addCard = () => {
 
 
     </div>
-
+    <AddMemberModal :boardId="board.id" :dialog="showModal" @close="boardModalClose" @added="onMemberAdded" />
   </div>
 
 </template>

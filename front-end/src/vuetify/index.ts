@@ -4,7 +4,7 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
-import { mdiAccount, mdiMenuDownOutline, mdiMenuDown } from '@mdi/js';
+import { mdiAccount, mdiMenuDownOutline, mdiMenuDown, mdiClose } from '@mdi/js';
 
 const vuetify = createVuetify({
   components,
@@ -16,6 +16,7 @@ const vuetify = createVuetify({
       account: mdiAccount,
       menuDownOutline: mdiMenuDownOutline,
       menuDown: mdiMenuDown,
+      close: mdiClose,
     },
     sets: {
       mdi,

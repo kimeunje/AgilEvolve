@@ -7,7 +7,9 @@ import com.agilevolve.domain.application.impl.BoardServiceImpl;
 import com.agilevolve.domain.common.event.DomainEventPublisher;
 import com.agilevolve.domain.model.board.Board;
 import com.agilevolve.domain.model.board.BoardManagement;
+import com.agilevolve.domain.model.board.BoardMemberRepository;
 import com.agilevolve.domain.model.board.BoardRepository;
+import com.agilevolve.domain.model.user.UserFinder;
 import com.agilevolve.domain.model.user.UserId;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,14 +33,18 @@ public class BoardServiceImplTests {
   private DomainEventPublisher domainEventPublisherMock;
   private BoardServiceImpl instance;
   private BoardRepository boardRepositoryMock;
+  private BoardMemberRepository boardMemberRepository;
+  private UserFinder userFinder;
 
   @BeforeEach
   public void setUp() {
     boardnManagementMock = mock(BoardManagement.class);
     domainEventPublisherMock = mock(DomainEventPublisher.class);
     boardRepositoryMock = mock(BoardRepository.class);
+    boardMemberRepository = mock(BoardMemberRepository.class);
+    userFinder = mock(UserFinder.class);
     instance = new BoardServiceImpl(boardnManagementMock, domainEventPublisherMock,
-        boardRepositoryMock);
+        boardRepositoryMock, boardMemberRepository, userFinder);
   }
 
   // -------------------------------------------

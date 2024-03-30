@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 
 import com.agilevolve.domain.model.board.Board;
 import com.agilevolve.domain.model.team.Team;
-import com.agilevolve.domain.model.user.SimpleUser;
+import com.agilevolve.domain.model.user.User;
 
 public class MyDataResult {
 
-  public static ResponseEntity<ApiResult> build(SimpleUser currentUser, List<Team> teams, List<Board> boards) {
-    Map<String, Object> user = new HashMap<>();
-    user.put("name", currentUser.getUsername());
+  public static ResponseEntity<ApiResult> build(User user, List<Team> teams, List<Board> boards) {
+    Map<String, Object> userData = new HashMap<>();
+    userData.put("name", user.getUsername());
 
     List<TeamResult> teamResults = new ArrayList<>();
     for (Team team : teams) {
@@ -28,7 +28,7 @@ public class MyDataResult {
     }
 
     ApiResult apiResult = ApiResult.blank()
-        .add("user", user)
+        .add("user", userData)
         .add("teams", teamResults)
         .add("boards", boardResults);
 
