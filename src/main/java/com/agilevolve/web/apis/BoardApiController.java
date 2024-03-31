@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.agilevolve.domain.application.BoardService;
 import com.agilevolve.domain.application.CardListService;
+import com.agilevolve.domain.application.CardService;
 import com.agilevolve.domain.application.TeamService;
 import com.agilevolve.domain.common.security.CurrentUser;
 import com.agilevolve.domain.model.board.Board;
 import com.agilevolve.domain.model.board.BoardId;
+import com.agilevolve.domain.model.card.Card;
 import com.agilevolve.domain.model.cardlist.CardList;
 import com.agilevolve.domain.model.team.Team;
 import com.agilevolve.domain.model.user.SimpleUser;
@@ -34,11 +35,14 @@ public class BoardApiController {
   private BoardService boardService;
   private TeamService teamService;
   private CardListService cardListService;
+  private CardService cardService;
 
-  public BoardApiController(BoardService boardService, TeamService teamService, CardListService cardListService) {
+  public BoardApiController(BoardService boardService, TeamService teamService, CardListService cardListService,
+      CardService cardService) {
     this.boardService = boardService;
     this.teamService = teamService;
     this.cardListService = cardListService;
+    this.cardService = cardService;
   }
 
   @PostMapping("/api/boards")
@@ -64,7 +68,9 @@ public class BoardApiController {
 
     List<CardList> cardLists = cardListService.findByBoardId(boardId);
 
-    return BoardResult.build(team, board, members, cardLists);
+    List<Card> cards = cardService.findByBoardId(boardId);
+
+    return BoardResult.build(team, board, members, cardLists, cards);
   }
 
   @PostMapping("/api/boards/{boardId}/members")

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.agilevolve.config.SecurityConfiguration;
 import com.agilevolve.domain.application.BoardService;
 import com.agilevolve.domain.application.CardListService;
+import com.agilevolve.domain.application.CardService;
 import com.agilevolve.domain.application.TeamService;
 import com.agilevolve.domain.application.commands.CreateBoardCommand;
 import com.agilevolve.domain.model.board.Board;
@@ -25,6 +26,7 @@ import com.agilevolve.web.payload.CreateBoardPayload;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,6 +52,9 @@ public class BoardApiControllerTests {
 
   @MockBean
   private CardListService cardListService;
+
+  @MockBean
+  private CardService cardService;
 
   private SimpleUser authenticatedUser;
 
@@ -100,4 +105,5 @@ public class BoardApiControllerTests {
 
     return new SimpleUser(user);
   }
+
 }

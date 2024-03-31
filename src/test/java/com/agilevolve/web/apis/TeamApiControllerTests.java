@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
@@ -82,9 +83,9 @@ public class TeamApiControllerTests {
 
     mvc.perform(
         post("/api/teams")
-            .with(user(authenticatedUser))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtils.toJson(mockPayload)))
+            .with(Objects.requireNonNull(user(authenticatedUser)))
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(Objects.requireNonNull(JsonUtils.toJson(mockPayload))))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name").value("Test Team"))
         .andExpect(jsonPath("$.id").value(3));

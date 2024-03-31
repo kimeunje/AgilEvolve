@@ -8,6 +8,7 @@ import cardListService from '@/services/card-lists'
 import type { CardList } from '@/interfaces/card-list/CardLists'
 import { useRoute } from 'vue-router';
 import boardService from '@/services/boards'
+import cardService from '@/services/cards'
 import type { Member } from '@/interfaces/board/member';
 
 const board = ref({ id: 0, personal: false, name: '' });
@@ -31,26 +32,28 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
       board.value.personal = data.board.personal;
       board.value.name = data.board.name;
 
-      data.members.forEach(member => {
-        members.value.push({
-          id: member.userId,
-          shortName: member.shortName
-        })
-      })
+      data.members.map(member => ({
+        id: member.userId,
+        shortName: member.shortName
+      }))
 
       data.cardLists.sort((list1, list2) => {
         return list1.position - list2.position
       })
 
-      cardLists.value = data.cardLists.map(cardList => ({
-        id: cardList.id,
-        name: cardList.name,
-        cards: [],
-        cardForm: {
-          open: false,
-          title: ''
+      cardLists.value = data.cardLists.map(cardList => {
+
+        const sortedCards = cardList.cards.sort((card1, card2) => card1.position - card2.position);
+        return {
+          id: cardList.id,
+          name: cardList.name,
+          cards: sortedCards,
+          cardForm: {
+            open: false,
+            title: ''
+          }
         }
-      }));
+      });
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +83,6 @@ const focusCardTextArea = ref<HTMLTextAreaElement | null>(null)
 const focusListInput = ref<HTMLInputElement | null>(null)
 
 const openAddMember = () => {
-  // TODO 멤버 추가 로직 구현
   showModal.value = true;
 }
 
@@ -138,7 +140,6 @@ const openAddCardForm = (cardList: any) => {
   cardList.cardForm.open = true
 
   nextTick().then(() => {
-    // TODO 카드 추가
     focusCardForm()
   })
 }
@@ -148,13 +149,35 @@ const focusCardForm = () => {
     focusCardTextArea.value?.focus()
   })
 }
+
 const closeAddCardForm = (cardList: any) => {
   cardList.cardForm.open = false
-  cardList.cardForm.name = ''
+  cardList.cardForm.title = ''
 }
 
-const addCard = () => {
-  // TODO 카드 추가 로직
+const addCard = (cardList: CardList) => {
+  if (!cardList.cardForm.title.trim()) {
+    return
+  }
+
+  const card = {
+    boardId: board.value.id,
+    cardListId: cardList.id,
+    title: cardList.cardForm.title,
+    position: cardList.cards.length + 1
+  }
+
+  cardService.add(card).then(savedCard => {
+    cardList.cards.push({
+      id: savedCard.id,
+      title: savedCard.title,
+      position: savedCard.position
+    })
+    cardList.cardForm.title = ""
+    focusCardForm()
+  }).catch(error => {
+    console.log(error.message)
+  })
 }
 
 const onCardListDragEnded = (event: Event) => {
@@ -179,10 +202,8 @@ const onCardListDragEnded = (event: Event) => {
   cardListService.changePositions(positionChanges).catch(error => {
     console.log(error);
   })
-
 }
 </script>
-
 
 <template>
   <div class="page" ref="pageElement">
@@ -230,10 +251,10 @@ const onCardListDragEnded = (event: Event) => {
                           추가하기
                         </div>
                         <div class="add-card-form-wrapper" v-if="element.cardForm.open">
-                          <form @submit.prevent="addCard()" class="add-card-form" autocomplete="off">
+                          <form @submit.prevent="addCard(element)" class="add-card-form" autocomplete="off">
                             <div class="form-group">
                               <textarea ref="focusCardTextArea" class="form-control" v-model="element.cardForm.title"
-                                v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard()"
+                                v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard(element)"
                                 placeholder="카드 제목을 입력해주세요."></textarea>
                             </div>
                             <button type="submit" class="btn btn-sm btn-primary">추가</button>
