@@ -64,6 +64,7 @@ import { storeToRefs } from 'pinia';
 import { useBoardUserStore } from '@/stores/useBoardUserStore'
 import { useI18n } from 'vue-i18n';
 import meService from '@/services/me'
+import notify from '@/utils/notify'
 
 const { getUser, hasBoards, personalBoards, teamBoards } = storeToRefs(useBoardUserStore())
 const { getMyData } = useBoardUserStore()
@@ -87,7 +88,7 @@ const signOut = () => {
   meService.signOut().then(() => {
     router.push({ name: 'login' })
   }).catch(error => {
-    console.log(error);
+    notify.error(error.message)
   })
 
 }

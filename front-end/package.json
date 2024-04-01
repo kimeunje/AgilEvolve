@@ -29,6 +29,7 @@
     "bootstrap": "^5.3.1",
     "chance": "^1.1.11",
     "lodash": "^4.17.21",
+    "noty": "^3.2.0-beta-deprecated",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
     "vue-i18n": "^9.6.5",

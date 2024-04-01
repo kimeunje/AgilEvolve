@@ -1,15 +1,20 @@
 <script setup lang="ts">
+import { nextTick, ref, watch } from "vue";
+import { useRoute } from 'vue-router';
+
+import boardService from '@/services/boards'
+import cardListService from '@/services/card-lists'
+import cardService from '@/services/cards'
+
+import { useEventListener } from '@vueuse/core'
+import draggable from 'vuedraggable';
+import notify from '@/utils/notify';
+
+import type { CardList } from '@/interfaces/card-list/CardLists'
+import type { Member } from '@/interfaces/board/member';
+
 import PageHeader from '@/components/PageHeader.vue'
 import AddMemberModal from '@/modals/AddMemberModal.vue'
-import draggable from 'vuedraggable';
-import { nextTick, ref, watch } from "vue";
-import { useEventListener } from '@vueuse/core'
-import cardListService from '@/services/card-lists'
-import type { CardList } from '@/interfaces/card-list/CardLists'
-import { useRoute } from 'vue-router';
-import boardService from '@/services/boards'
-import cardService from '@/services/cards'
-import type { Member } from '@/interfaces/board/member';
 
 const board = ref({ id: 0, personal: false, name: '' });
 const team = ref({ name: '' });
@@ -25,8 +30,7 @@ const showModal = ref(false);
 
 watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
   if (newBoardId !== oldBoardId) {
-    try {
-      const data = await boardService.getBoard(parseInt(newBoardId as string));
+    boardService.getBoard(parseInt(newBoardId as string)).then(data => {
       team.value.name = data.team ? data.team.name : '';
       board.value.id = data.board.id;
       board.value.personal = data.board.personal;
@@ -56,9 +60,9 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
           }
         }
       });
-    } catch (error) {
-      console.log(error);
-    }
+    }).catch(error => {
+      notify.error(error.message)
+    })
   }
 }, { immediate: true });
 
@@ -131,7 +135,7 @@ const addCardList = () => {
     })
     closeAddListForm()
   }).catch(error => {
-    console.log(error);
+    notify.error(error.message)
   })
 }
 
@@ -178,7 +182,7 @@ const addCard = (cardList: CardList) => {
     cardList.cardForm.title = ""
     focusCardForm()
   }).catch(error => {
-    console.log(error.message)
+    notify.error(error.message)
   })
 }
 
@@ -202,7 +206,7 @@ const onCardListDragEnded = (event: Event) => {
   })
 
   cardListService.changePositions(positionChanges).catch(error => {
-    console.log(error);
+    notify.error(error.message)
   })
 }
 
@@ -244,7 +248,7 @@ const onCardDragEnded = (event: CardDragEvent) => {
     })
 
     cardService.changePositions(positionChanges).catch(error => {
-      console.log(error.message)
+      notify.error(error.message)
     })
   })
 }
