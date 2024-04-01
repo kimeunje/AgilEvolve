@@ -36,12 +36,10 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
       board.value.personal = data.board.personal;
       board.value.name = data.board.name;
 
-      data.members.forEach(member => {
-        members.value.push({
-          id: member.userId,
-          shortName: member.shortName
-        })
-      })
+      members.value = data.members.map(member => ({
+        id: member.userId,
+        shortName: member.shortName
+      }));
 
       data.cardLists.sort((list1, list2) => {
         return list1.position - list2.position
