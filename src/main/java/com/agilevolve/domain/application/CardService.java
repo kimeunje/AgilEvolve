@@ -3,6 +3,7 @@ package com.agilevolve.domain.application;
 import java.util.List;
 
 import com.agilevolve.domain.application.commands.AddCardCommand;
+import com.agilevolve.domain.application.commands.ChangeCardPositionsCommand;
 import com.agilevolve.domain.model.board.BoardId;
 import com.agilevolve.domain.model.card.Card;
 
@@ -28,4 +29,5 @@ public interface CardService {
    * 
    * @param command 커멘드 객체
    */
+  void changePositions(ChangeCardPositionsCommand command);
 }

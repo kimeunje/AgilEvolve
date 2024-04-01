@@ -205,6 +205,49 @@ const onCardListDragEnded = (event: Event) => {
     console.log(error);
   })
 }
+
+interface CardDragEvent extends Event {
+  from: HTMLElement & { dataset: { cardListId: string } };
+  to: HTMLElement & { dataset: { cardListId: string } };
+}
+
+const onCardDragEnded = (event: CardDragEvent) => {
+  const fromListId = event.from.dataset.cardListId
+  const toListId = event.to.dataset.cardListId
+  const changedListIds = [fromListId]
+  if (fromListId !== toListId) {
+    changedListIds.push(toListId)
+  }
+
+  interface CardPositions {
+    cardListId: string;
+    cardId: number;
+    position: number;
+  }
+
+  const positionChanges = {
+    boardId: board.value.id,
+    cardPositions: [] as CardPositions[]
+  }
+
+  changedListIds.forEach(cardListId => {
+    const cardList = cardLists.value.filter(cardList => {
+      return cardList.id === parseInt(cardListId)
+    })[0]
+
+    cardList.cards.forEach((card, index) => {
+      positionChanges.cardPositions.push({
+        cardListId: cardListId,
+        cardId: card.id,
+        position: index + 1
+      })
+    })
+
+    cardService.changePositions(positionChanges).catch(error => {
+      console.log(error.message)
+    })
+  })
+}
 </script>
 
 <template>
@@ -241,7 +284,7 @@ const onCardListDragEnded = (event: Event) => {
                         <div class="list-header">{{ element.name }}</div>
                         <draggable v-model="element.cards" class="cards" group="cards" draggable=".card-item"
                           ghostClass="ghost-card" :animation=0 :scrollSensitivity=100 :touchStartThreshold=20
-                          itemKey="name">
+                          itemKey="name" @end="onCardDragEnded" v-bind:data-card-list-id="element.id">
                           <template #item="{ element }">
                             <div class="card-item">
                               <div class="card-title">{{ element.title }}</div>

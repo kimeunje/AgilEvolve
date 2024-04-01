@@ -15,14 +15,14 @@ interface SavedCard {
 }
 
 interface CardPosition {
-  cardListId: number;
+  cardListId: string;
   cardId: number;
   position: number;
 }
 
 interface positionChanges {
   boardId: number;
-  cardListPositions: CardPosition[];
+  cardPositions: CardPosition[];
 }
 
 export default {

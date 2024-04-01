@@ -43,7 +43,6 @@ export default {
   getBoard(boardId: number): Promise<GetBoardRes> {
     return new Promise((resolve, reject) => {
       axios.get('/boards/' + boardId).then(({ data }) => {
-        console.log(data.cardLists);
         resolve(data)
       }).catch((error) => {
         reject(errorParser.parse(error))

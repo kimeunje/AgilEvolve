@@ -2,6 +2,7 @@ package com.agilevolve.domain.model.card;
 
 import java.util.List;
 
+import com.agilevolve.domain.application.commands.ChangeCardPositionsCommand;
 import com.agilevolve.domain.model.board.BoardId;
 
 public interface CardRepository {
@@ -23,6 +24,7 @@ public interface CardRepository {
   /**
    * 카드 포지션 변경
    * 
-   * @param command 커멘드 객체
+   * @param cardPositions 카드 포지션
    */
+  void changePositions(List<CardPosition> cardPositions);
 }
