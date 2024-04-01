@@ -1,5 +1,7 @@
 package com.agilevolve.domain.model.board.events;
 
+import org.springframework.util.Assert;
+
 import com.agilevolve.domain.common.event.DomainEvent;
 import com.agilevolve.domain.model.board.Board;
 
@@ -11,6 +13,7 @@ public class BoardCreatedEvent extends DomainEvent {
 
   public BoardCreatedEvent(Object source, Board board) {
     super(source);
+    Assert.notNull(board, "`board` 파라미터는 null이면 안됩니다.");
     this.board = board;
   }
 

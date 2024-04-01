@@ -15,6 +15,7 @@ import com.agilevolve.domain.model.board.BoardManagement;
 import com.agilevolve.domain.model.board.BoardMemberRepository;
 import com.agilevolve.domain.model.board.BoardRepository;
 import com.agilevolve.domain.model.board.events.BoardCreatedEvent;
+import com.agilevolve.domain.model.board.events.BoardMemberAddedEvent;
 import com.agilevolve.domain.model.user.User;
 import com.agilevolve.domain.model.user.UserFinder;
 import com.agilevolve.domain.model.user.UserId;
@@ -67,7 +68,7 @@ public class BoardServiceImpl implements BoardService {
   public User addMember(BoardId boardId, String usernameOrEmailAddress) throws UserNotFoundException {
     User user = userFinder.find(usernameOrEmailAddress);
     boardMemberRepository.add(boardId, user.getId());
+    domainEventPublisher.publish(new BoardMemberAddedEvent(this, boardId, user));
     return user;
-    // domainEventPublisher.publish(new BoardMemberAddedEvent(this, boardId, user));
   }
 }

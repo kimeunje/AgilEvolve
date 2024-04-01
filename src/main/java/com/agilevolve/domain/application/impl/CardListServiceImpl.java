@@ -11,6 +11,7 @@ import com.agilevolve.domain.common.event.DomainEventPublisher;
 import com.agilevolve.domain.model.board.BoardId;
 import com.agilevolve.domain.model.cardlist.CardList;
 import com.agilevolve.domain.model.cardlist.CardListRepository;
+import com.agilevolve.domain.model.cardlist.events.CardListAddedEvent;
 
 import jakarta.transaction.Transactional;
 
@@ -37,6 +38,7 @@ public class CardListServiceImpl implements CardListService {
                 command.getPosition());
 
         cardListRepository.save(cardList);
+        domainEventPublisher.publish(new CardListAddedEvent(this, cardList));
         return cardList;
     }
 
