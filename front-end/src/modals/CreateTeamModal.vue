@@ -4,24 +4,24 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Create Team</h5>
+            <h5 class="modal-title">팀 생성하기</h5>
             <button type="button" class="close" @click="close" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="teamNameInput" v-model="team.name" placeholder="Team name"
+            <div class="form-group mb-2">
+              <input type="text" class="form-control" id="teamNameInput" v-model="team.name" placeholder="팀 이름"
                 maxlength="128" ref="teamNameInput">
               <div class="field-error" v-if="v$.team.name.$dirty">
-                <div class="error" v-if="v$.team.name.required.$invalid">Name is required</div>
+                <div class="error" v-if="v$.team.name.required.$invalid">팀 이름을 필수로 입력해주세요</div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Create</button>
-            <button type="button" class="btn btn-default btn-cancel" @click="close">Cancel</button>
+            <button type="submit" class="btn btn-primary">생성하기</button>
+            <button type="button" class="btn btn-default btn-cancel" @click="close">취소하기</button>
           </div>
         </div>
       </div>

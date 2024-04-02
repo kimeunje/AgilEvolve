@@ -37,7 +37,7 @@ textarea.form-control:focus {
 .public {
   .form {
     margin-top: 50px;
-    width: 320px;
+    width: 360px;
 
     .form-group {
       label {

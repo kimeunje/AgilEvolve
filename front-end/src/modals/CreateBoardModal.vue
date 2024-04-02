@@ -4,31 +4,31 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Create Board</h5>
+            <h5 class="modal-title">보드 생성하기</h5>
             <button type="button" class="close" @click="close" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
+          <div class="modal-body mb-2">
             <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
-            <div class="form-group">
-              <input type="text" class="form-control" id="boardNameInput" v-model="board.name" placeholder="Board name"
+            <div class="form-group mb-2">
+              <input type="text" class="form-control" id="boardNameInput" v-model="board.name" placeholder="보드 이름"
                 maxlength="128" ref="boardNameInput">
               <div class="field-error" v-if="v$.board.name.$dirty">
-                <div class="error" v-if="v$.board.name.required.$invalid">Name is required</div>
+                <div class="error" v-if="v$.board.name.required.$invalid">보드 이름을 필수적으로 입력해주세요</div>
               </div>
             </div>
             <div class="form-group">
               <textarea class="form-control" v-model="board.description"
-                placeholder="Add board description here"></textarea>
+                placeholder="여기에 보드 설명을 추가해주세요"></textarea>
               <div class="field-error" v-if="v$.board.description.$dirty">
-                <div class="error" v-if="v$.board.description.required.$invalid">Description is required</div>
+                <div class="error" v-if="v$.board.description.required.$invalid">보드 설명을 필수적으로 입력해주세요</div>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Create</button>
-            <button type="button" class="btn btn-default btn-cancel" @click="close">Cancel</button>
+            <button type="submit" class="btn btn-primary">생성하기</button>
+            <button type="button" class="btn btn-default btn-cancel" @click="close">취소하기</button>
           </div>
         </div>
       </div>

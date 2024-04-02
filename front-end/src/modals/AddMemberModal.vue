@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import boardService from '@/services/boards';
@@ -28,8 +28,17 @@ const props = defineProps({
   }
 })
 
+const modalEle = ref<HTMLInputElement | null>(null);
+const addMemberInput = ref<HTMLInputElement | null>(null);
+
 const errorMessage = ref("");
 const emit = defineEmits(['close', 'added'])
+
+onMounted(() => {
+  modalEle?.value?.addEventListener('shown.bs.modal', () => {
+    addMemberInput?.value?.focus();
+  });
+});
 
 const addMember = () => {
   v$.value.$touch();
@@ -55,42 +64,40 @@ const close = () => {
 </script>
 
 <template>
-  <div class="pa-4 text-center">
-    <v-dialog v-model="props.dialog" activator="target" max-width="500" persistent>
-      <v-form @submit.prevent="addMember">
-        <v-card rounded="lg">
-          <v-card-title class="d-flex justify-space-between align-center">
-            <div class="text-h5 text-medium-emphasis ps-2">
-              멤버 초대
-            </div>
-
-            <v-btn icon="$close" variant="text" @click="close"></v-btn>
-          </v-card-title>
-
-
-          <v-card-text class="mx-auto">
-            <div class="text-medium mb-5">
-              추가할 멤버의 아이디 또는 이메일을 입력해주세요.
-            </div>
-            <v-sheet class="mx-auto" width="300">
-              <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
-              <v-text-field v-model="state.usernameOrEmailAddress" autocomplete="text" label="Username or email address"
-                hide-details required></v-text-field>
+  <form @submit.prevent="addMember">
+    <div class="modal" tabindex="-1" role="dialog" data-bs-backdrop="static" id="addMemberModal" ref="modalEle">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">멤버 초대</h5>
+            <button type="button" class="close" @click="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mb-2">
+            <div v-show="errorMessage" class="alert alert-danger failed">{{ errorMessage }}</div>
+            <div class="form-group mb-2">
+              <input type="text" class="form-control" id="addMemberInput" v-model="state.usernameOrEmailAddress"
+                placeholder="아이디 또는 이메일" maxlength="128" ref="addMemberInput">
               <div class="field-error" v-if="v$.usernameOrEmailAddress.$dirty">
                 <div class="error" v-if="v$.usernameOrEmailAddress.required.$invalid">필수로 입력해주세요.</div>
               </div>
-            </v-sheet>
-
-          </v-card-text>
-
-          <v-divider class="mt-2"></v-divider>
-
-          <v-card-actions class="my-2 d-flex justify-end">
-            <v-btn class="text-none" color="primary" rounded="xl" text="Add" variant="flat" type="submit"></v-btn>
-            <v-btn class="text-none" rounded="xl" text="Cancel" @click="close()"></v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-form>
-    </v-dialog>
-  </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">생성하기</button>
+            <button type="button" class="btn btn-default btn-cancel" @click="close">취소하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </template>
+
+<style lang="scss" scoped>
+.modal {
+  .modal-dialog {
+    width: 300px;
+  }
+}
+</style>

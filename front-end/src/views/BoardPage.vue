@@ -9,12 +9,15 @@ import cardService from '@/services/cards'
 import { useEventListener } from '@vueuse/core'
 import draggable from 'vuedraggable';
 import notify from '@/utils/notify';
+import { Modal } from 'bootstrap';
 
 import type { CardList } from '@/interfaces/card-list/CardLists'
 import type { Member } from '@/interfaces/board/member';
 
 import PageHeader from '@/components/PageHeader.vue'
 import AddMemberModal from '@/modals/AddMemberModal.vue'
+import { onMounted } from "vue";
+
 
 const board = ref({ id: 0, personal: false, name: '' });
 const team = ref({ name: '' });
@@ -26,7 +29,12 @@ const pageElement = ref(null);
 
 const route = useRoute();
 
-const showModal = ref(false);
+const memberModalComponent = ref<typeof AddMemberModal | null>(null);
+const memberModalObj = ref<Modal | null>(null);
+
+onMounted(() => {
+  memberModalObj.value = new Modal(memberModalComponent?.value?.$refs.modalEle);
+})
 
 watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
   if (newBoardId !== oldBoardId) {
@@ -87,11 +95,11 @@ const focusCardTextArea = ref<HTMLTextAreaElement | null>(null)
 const focusListInput = ref<HTMLInputElement | null>(null)
 
 const openAddMember = () => {
-  showModal.value = true;
+  memberModalObj?.value?.show();
 }
 
 const boardModalClose = () => {
-  showModal.value = false;
+  memberModalObj?.value?.hide();
 }
 
 const onMemberAdded = (member: { id: number; shortName: string; }) => {
@@ -279,7 +287,7 @@ const onCardDragEnded = (event: CardDragEvent) => {
             <div class="list-container">
               <draggable style="display: flex;" v-model="cardLists" handle=".list-header" :animation=0
                 :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name" @end="onCardListDragEnded">
-                <template #item="{ element }">
+                <template #item="{ element, index }">
                   <div class="draggable-wrapper">
                     <div class="list-wrapper">
                       <div class="list">
@@ -311,23 +319,26 @@ const onCardDragEnded = (event: CardDragEvent) => {
                         </div>
                       </div>
                     </div>
-
+                    <div class="list-wrapper add-list" v-if="index === cardLists.length - 1">
+                      <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트
+                        추가하기
+                      </div>
+                      <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form"
+                        autocomplete="off">
+                        <div class="form-group">
+                          <input ref="focusListInput" type="text" class="form-control mb-2" v-model="addListForm.name"
+                            id="cardListName" placeholder="이름을 작성해주세요." />
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">추가</button>
+                        <button type="button" class="btn btn-sm btn-link btn-cancel"
+                          @click="closeAddListForm()">취소</button>
+                      </form>
+                    </div>
                   </div>
 
                 </template>
               </draggable>
-              <div class="list-wrapper add-list">
-                <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트 추가하기</div>
-                <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form"
-                  autocomplete="off">
-                  <div class="form-group">
-                    <input ref="focusListInput" type="text" class="form-control" v-model="addListForm.name"
-                      id="cardListName" placeholder="이름을 작성해주세요." />
-                  </div>
-                  <button type="submit" class="btn btn-sm btn-primary">추가</button>
-                  <button type="button" class="btn btn-sm btn-link btn-cancel" @click="closeAddListForm()">취소</button>
-                </form>
-              </div>
+
             </div>
 
           </div>
@@ -336,7 +347,7 @@ const onCardDragEnded = (event: CardDragEvent) => {
 
 
     </div>
-    <AddMemberModal :boardId="board.id" :dialog="showModal" @close="boardModalClose" @added="onMemberAdded" />
+    <AddMemberModal :boardId="board.id" @added="onMemberAdded" @close="boardModalClose" ref="memberModalComponent"/>
   </div>
 
 </template>
@@ -349,7 +360,10 @@ const onCardDragEnded = (event: CardDragEvent) => {
 
   .board-wrapper {
     position: absolute;
-    margin: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 
     .board {
       height: 100%;
@@ -433,7 +447,10 @@ const onCardDragEnded = (event: CardDragEvent) => {
 
         .list-container {
           position: absolute;
+          top: 0;
           left: 8px;
+          right: 0;
+          bottom: 0;
           overflow-x: auto;
           overflow-y: hidden;
           white-space: nowrap;
@@ -459,6 +476,7 @@ const onCardDragEnded = (event: CardDragEvent) => {
               max-height: 100%;
               white-space: normal;
               position: relative;
+
 
               .list-header {
                 padding: .55rem .75rem;
@@ -521,6 +539,7 @@ const onCardDragEnded = (event: CardDragEvent) => {
 
           .list-wrapper.add-list {
             background: #f4f4f4;
+            height: auto;
             border-radius: 3px;
             box-sizing: border-box;
             color: #888;

@@ -10,7 +10,7 @@
           <li class="mb-1 list-inline-item"><a class="link-secondary" href="#">{{ $t("pageFooter.privacyPolicy") }}</a>
           </li>
           <li class="mb-1 list-inline-item"><a class="link-secondary"
-              href="https://github.com/kimeunje/vuejs.spring-boot.mariadb">GitHub</a></li>
+              href="https://github.com/kimeunje/agilEvolve">GitHub</a></li>
         </ul>
       </div>
     </div>
@@ -33,4 +33,5 @@
   a {
     color: #666;
   }
-}</style>
+}
+</style>

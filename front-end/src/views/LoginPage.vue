@@ -22,7 +22,8 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-primary w-100 py-2" type="submit">{{ t("loginPage.form.submit") }}</button>
+            <button class="btn btn-primary w-100 py-2" type="submit">{{ t("loginPage.form.submit")
+              }}</button>
             <div class="links">
               <p class="sign-up text-muted">{{ t("loginPage.form.noAccountYet") }}
                 <router-link to="/register" class="link-sign-up">{{ t("loginPage.form.signUpHere") }}</router-link>
@@ -58,8 +59,8 @@ export default {
     const { t } = useI18n()
 
     const form = ref({
-      username: '',
-      password: ''
+      username: 'test',
+      password: 'test1234'
     })
 
     const errorMessage = ref('')
