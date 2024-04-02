@@ -4,6 +4,18 @@ import axios from 'axios'
 
 import App from './App.vue'
 import router from './router'
+import { Quasar } from 'quasar'
+
+
+/**
+ * Quasar 설정
+ * 
+ * Import icon libraries
+ * Import Quasar css
+ */
+import '@quasar/extras/material-icons/material-icons.css'
+import 'quasar/src/css/index.sass'
+
 
 // 부트스트랩 설정
 import 'bootstrap/dist/css/bootstrap.css'
@@ -36,6 +48,6 @@ library.add(faUserSecret, faHouse, faSearch, faPlus, faUserPlus)
 const app = createApp(App)
 const pinia = createPinia()
 
-app.component('font-awesome-icon', FontAwesomeIcon).use(pinia).use(router).use(i18n).use(vuetify)
+app.component('font-awesome-icon', FontAwesomeIcon).use(pinia).use(router).use(i18n).use(vuetify).use(Quasar, { plugins: {} })
 
 app.mount('#app')
