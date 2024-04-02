@@ -1,14 +1,11 @@
 package com.agilevolve.web.apis;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.agilevolve.config.SecurityConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.agilevolve.domain.application.BoardService;
 import com.agilevolve.domain.application.CardListService;
 import com.agilevolve.domain.application.CardService;
@@ -16,87 +13,169 @@ import com.agilevolve.domain.application.TeamService;
 import com.agilevolve.domain.application.commands.CreateBoardCommand;
 import com.agilevolve.domain.model.board.Board;
 import com.agilevolve.domain.model.board.BoardId;
+import com.agilevolve.domain.model.card.Card;
+import com.agilevolve.domain.model.cardlist.CardList;
+import com.agilevolve.domain.model.team.Team;
 import com.agilevolve.domain.model.team.TeamId;
 import com.agilevolve.domain.model.user.SimpleUser;
 import com.agilevolve.domain.model.user.User;
 import com.agilevolve.domain.model.user.UserId;
-import com.agilevolve.utils.JsonUtils;
+import com.agilevolve.domain.model.user.UserNotFoundException;
+import com.agilevolve.web.payload.AddBoardMemberPayload;
 import com.agilevolve.web.payload.CreateBoardPayload;
+import com.agilevolve.web.results.ApiResult;
+import com.agilevolve.web.results.BoardResult;
+import com.agilevolve.web.results.CreateBoardResult;
+import com.agilevolve.web.results.Result;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@ActiveProfiles("test")
-@ContextConfiguration(classes = { SecurityConfiguration.class, BoardApiController.class })
-@WebMvcTest
 public class BoardApiControllerTests {
-  @Autowired
-  private MockMvc mvc;
 
-  @MockBean
+  @Mock
   private BoardService boardService;
-
-  @MockBean
+  @Mock
   private TeamService teamService;
-
-  @MockBean
+  @Mock
   private CardListService cardListService;
-
-  @MockBean
+  @Mock
   private CardService cardService;
+  @InjectMocks
+  private BoardApiController boardController;
 
-  private SimpleUser authenticatedUser;
+  public SimpleUser currentUser;
 
   @BeforeEach
-  public void setUp() throws IllegalAccessException {
-    authenticatedUser = simpleUser();
+  void setUp() throws IllegalAccessException {
+    MockitoAnnotations.openMocks(this);
+    currentUser = simpleUser();
   }
 
   @Test
-  public void createBoard_blankPayload_shouldFailAndReturn400() throws Exception {
-    mvc.perform(post("/api/boards")
-        .with(user(authenticatedUser)))
-        .andExpect(status().is(400));
+  void createBoard_validPayload_shouldSucceedAndReturn200() throws IllegalAccessException {
+    // Arrange
+    CreateBoardPayload createBoardPayload = new CreateBoardPayload();
+    createBoardPayload.setName("Test Board");
+    createBoardPayload.setDescription("Test Description");
+    createBoardPayload.setTeamId(1L);
+
+    Board board = Board.create(new UserId(1L), "Test Board", "Test Description", new TeamId(1L));
+    FieldUtils.writeField(board, "id", 1L, true);
+
+    when(boardService.createBoard(any(CreateBoardCommand.class))).thenReturn(board);
+
+    // Act
+    ResponseEntity<ApiResult> response = boardController.createBoard(createBoardPayload, currentUser);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(CreateBoardResult.build(board), response);
   }
 
   @Test
-  public void createBoard_validPayload_shouldSucceedAndReturn201() throws Exception {
+  void getBoard_blankPayload_shouldSucceedAndReturn200() throws IllegalAccessException {
+    // Arrange
+    long rawBoardId = 1L;
+    BoardId boardId = new BoardId(rawBoardId);
 
-    CreateBoardPayload mockPayload = Mockito.mock(CreateBoardPayload.class);
-    when(mockPayload.getName()).thenReturn("Test Board");
-    when(mockPayload.getDescription()).thenReturn("Test Description");
-    when(mockPayload.getTeamId()).thenReturn(1L);
+    Board board = new Board();
+    FieldUtils.writeField(board, "id", 1L, true);
 
-    Board mockBoard = Mockito.mock(Board.class);
-    when(mockBoard.getId()).thenReturn(new BoardId(1L));
-    when(mockBoard.getUserId()).thenReturn(new UserId(1L));
-    when(mockBoard.getName()).thenReturn("Test Board");
-    when(mockBoard.getDescription()).thenReturn("Test Description");
-    when(mockBoard.getTeamId()).thenReturn(new TeamId(1L));
+    List<User> members = new ArrayList<>();
+    Team team = new Team();
+    List<CardList> cardLists = new ArrayList<>();
+    List<Card> cards = new ArrayList<>();
 
-    when(boardService.createBoard(any(CreateBoardCommand.class))).thenReturn(mockBoard);
+    when(boardService.findById(boardId)).thenReturn(board);
+    when(boardService.findMembers(boardId)).thenReturn(members);
+    when(teamService.findById(board.getTeamId())).thenReturn(team);
+    when(cardListService.findByBoardId(boardId)).thenReturn(cardLists);
+    when(cardService.findByBoardId(boardId)).thenReturn(cards);
 
-    mvc.perform(
-        post("/api/boards")
-            .with(user(authenticatedUser))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtils.toJson(mockPayload)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.teamId").value(1))
-        .andExpect(jsonPath("$.name").value("Test Board"))
-        .andExpect(jsonPath("$.description").value("Test Description"))
-        .andExpect(jsonPath("$.id").value(1));
+    // Act
+    ResponseEntity<ApiResult> response = boardController.getBoard(rawBoardId);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(BoardResult.build(team, board, members, cardLists, cards), response);
+  }
+
+  @Test
+  void addMember_nonExistedBoard_shouldFailAndReturn404() throws IllegalAccessException {
+    // Arrange
+    AddBoardMemberPayload addBoardMemberPayload = new AddBoardMemberPayload();
+    addBoardMemberPayload.setUsernameOrEmailAddress("Test Board");
+
+    BoardId boardId = new BoardId(1L);
+
+    when(boardService.findById(boardId)).thenReturn(null);
+
+    // Act
+    ResponseEntity<ApiResult> response = boardController.addMember(boardId.value(), addBoardMemberPayload);
+
+    // Assert
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals(Result.notFound(), response);
+  }
+
+  @Test
+  void addMember_nonExistedUser_shouldFailAndReturn400() throws IllegalAccessException, UserNotFoundException {
+    // Arrange
+    AddBoardMemberPayload payload = new AddBoardMemberPayload();
+    payload.setUsernameOrEmailAddress("Test Board");
+
+    BoardId boardId = new BoardId(1L);
+
+    Board board = new Board();
+    FieldUtils.writeField(board, "id", 1L, true);
+
+    when(boardService.findById(boardId)).thenReturn(board);
+    when(boardService.addMember(boardId, payload.getUsernameOrEmailAddress())).thenThrow(UserNotFoundException.class);
+
+    // Act
+    ResponseEntity<ApiResult> response = boardController.addMember(boardId.value(), payload);
+
+    // Assert
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals(Result.failure("유저를 찾을 수 없습니다."), response);
+  }
+
+  @Test
+  void addMember_existedUsername_shouldSucceedAndReturn200() throws IllegalAccessException, UserNotFoundException {
+    // Arrange
+    AddBoardMemberPayload payload = new AddBoardMemberPayload();
+    payload.setUsernameOrEmailAddress("Test Board");
+
+    BoardId boardId = new BoardId(1L);
+
+    Board board = new Board();
+    FieldUtils.writeField(board, "id", 1L, true);
+
+    User user = User.create("sunny", "test@agilevolve.com", "Mypassword!");
+    FieldUtils.writeField(user, "id", 1L, true);
+
+    ApiResult apiResult = ApiResult.blank()
+        .add("id", user.getId().value())
+        .add("shortName", user.getInitials());
+
+    when(boardService.findById(boardId)).thenReturn(board);
+    when(boardService.addMember(boardId, payload.getUsernameOrEmailAddress())).thenReturn(user);
+
+    // Act
+    ResponseEntity<ApiResult> response = boardController.addMember(boardId.value(), payload);
+
+    // Assert
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(Result.ok(apiResult), response);
   }
 
   private SimpleUser simpleUser() throws IllegalAccessException {
@@ -105,5 +184,4 @@ public class BoardApiControllerTests {
 
     return new SimpleUser(user);
   }
-
 }
