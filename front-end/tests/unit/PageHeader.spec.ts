@@ -56,10 +56,10 @@ describe('PageHeader', () => {
     expect(wrapper.findAll('.dropdown-item')[2].text()).toBe('Team Board')
   })
 
-  it('검색창을 렌더링합니다.', () => {
-    expect(wrapper.find('.search-box').exists()).toBe(true)
-    expect(wrapper.find('.search-box input').exists()).toBe(true)
-  })
+  // it('검색창을 렌더링합니다.', () => {
+  //   expect(wrapper.find('.search-box').exists()).toBe(true)
+  //   expect(wrapper.find('.search-box input').exists()).toBe(true)
+  // })
 
   it('프로필 메뉴를 렌더링합니다', () => {
     expect(wrapper.find('.profile-menu-toggle').exists()).toBe(true)

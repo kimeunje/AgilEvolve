@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header d-flex align-content-center">
+  <div class="page-header d-flex align-content-center ">
     <div class="logo" @click="goHome()">
       <font-awesome-icon :icon="['fas', 'house']" class="home-icon" />
       <img src="/images/logo.png">
@@ -26,14 +26,14 @@
       </div>
     </div>
 
-    <div class="search-box flex-fill">
+    <!-- <div class="search-box flex-fill">
       <div class="search-wrapper">
         <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="search-icon" />
         <input type="text" v-bind:placeholder="t('header.search')" class="form-control form-control-sm" />
       </div>
-    </div>
+    </div> -->
 
-    <div class="profile-menu-toggle">
+    <div class="profile-menu-toggle flex-fill">
       <div class="dropdown">
         <button class="btn dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -106,8 +106,7 @@ const signOut = () => {
     }
 
     img {
-      margin-left: 5px;
-      margin-top: 6px;
+      margin-left: 3px;
       width: 80px;
       height: 20px;
     }
