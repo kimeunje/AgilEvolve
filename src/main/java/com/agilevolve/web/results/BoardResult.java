@@ -32,7 +32,6 @@ public class BoardResult {
     Map<CardListId, List<Card>> cardsByList = new HashMap<>();
 
     for (Card card : cards) {
-      System.out.println(cardsByList.toString());
       cardsByList.computeIfAbsent(card.getCardListId(), k -> new ArrayList<>()).add(card);
     }
 
@@ -75,12 +74,15 @@ public class BoardResult {
     private long id;
     private String name;
     private int position;
+    private boolean archived;
     private List<CardData> cards = new ArrayList<>();
 
     CardListData(CardList cardList, List<Card> cards) {
       this.id = cardList.getId().value();
       this.name = cardList.getName();
       this.position = cardList.getPosition();
+      this.archived = cardList.isArchived();
+
       if (cards != null) {
         for (Card card : cards) {
           this.cards.add(new CardData(card));
@@ -100,10 +102,13 @@ public class BoardResult {
       return position;
     }
 
+    public boolean isArchived() {
+      return archived;
+    }
+
     public List<CardData> getCards() {
       return cards;
     }
-
   }
 
   private static class CardData {

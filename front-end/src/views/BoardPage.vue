@@ -60,6 +60,7 @@ watch(() => route.params.boardId, async (newBoardId, oldBoardId) => {
           id: cardList.id,
           name: cardList.name,
           cards: sortedCards,
+          archived: cardList.archived,
           cardForm: {
             open: false,
             title: ''
@@ -134,6 +135,7 @@ const addCardList = () => {
       id: savedCardList.id,
       name: savedCardList.name,
       cards: [],
+      archived: false,
       cardForm: {
         open: false,
         title: ''
@@ -258,6 +260,17 @@ const onCardDragEnded = (event: CardDragEvent) => {
     })
   })
 }
+
+const archivedCardList = (cardListId: number) => {
+  cardListService.archivedCardList(cardListId, true).then(() => {
+    const targetCardList = cardLists.value.find(list => list.id === cardListId);
+    if (targetCardList) {
+      targetCardList.archived = true;
+    }
+  }).catch((error) => {
+    notify.error(error.message)
+  })
+}
 </script>
 
 <template>
@@ -287,9 +300,23 @@ const onCardDragEnded = (event: CardDragEvent) => {
             <draggable v-model="cardLists" class="list-container" handle=".list-header" :animation=0
               :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name" @end="onCardListDragEnded">
               <template #item="{ element }">
-                <div class="list-wrapper">
+                <div class="list-wrapper" v-if="!element.archived">
                   <div class="list">
-                    <div class="list-header">{{ element.name }}</div>
+                    <div class="list-header" style="display: flex; justify-content: space-between;">
+                      <span>{{ element.name }}</span>
+
+                      <button class="btn-sm" type="button" data-bs-toggle="dropdown" data-bs-auto-close="true"
+                        aria-expanded="false">
+                        ...
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <div class="dropdown-item" @click="archivedCardList(element.id)">삭제하기</div>
+                        </li>
+                      </ul>
+
+                    </div>
+
                     <draggable v-model="element.cards" class="cards" group="cards" draggable=".card-item"
                       ghostClass="ghost-card" :animation=0 :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name"
                       @end="onCardDragEnded" v-bind:data-card-list-id="element.id">

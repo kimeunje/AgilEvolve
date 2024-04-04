@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityManager;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -14,6 +13,7 @@ import org.hibernate.query.NativeQuery;
 
 import com.agilevolve.domain.model.board.BoardId;
 import com.agilevolve.domain.model.cardlist.CardList;
+import com.agilevolve.domain.model.cardlist.CardListId;
 import com.agilevolve.domain.model.cardlist.CardListPosition;
 import com.agilevolve.domain.model.cardlist.CardListRepository;
 
@@ -25,6 +25,11 @@ public class HibernateCardListRepository extends HibernateSupport<CardList> impl
   HibernateCardListRepository(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
     super(entityManager);
     this.jdbcTemplate = jdbcTemplate;
+  }
+
+  @Override
+  public CardList findById(CardListId cardListId) {
+    return getSession().find(CardList.class, cardListId.value());
   }
 
   @Override

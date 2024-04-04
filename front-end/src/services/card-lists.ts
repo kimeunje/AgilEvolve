@@ -50,5 +50,15 @@ export default {
         reject(errorParser.parse(error))
       })
     })
+  },
+
+  archivedCardList(cardListId: number, archived: boolean): Promise<any> {
+    return new Promise((resolve, reject) => {
+      axios.put('/card-lists/' + cardListId + '/archived', { archived }).then(({ data }) => {
+        resolve(data)
+      }).catch((error) => {
+        reject(errorParser.parse(error))
+      })
+    })
   }
 }

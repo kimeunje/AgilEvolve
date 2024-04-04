@@ -48,6 +48,10 @@ public class CardList extends AbstractBaseEntity {
         return cardList;
     }
 
+    public void changeArchived(boolean archived) {
+        this.archived = archived;
+    }
+
     public CardListId getId() {
         return new CardListId(id);
     }

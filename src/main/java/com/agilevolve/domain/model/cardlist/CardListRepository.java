@@ -7,6 +7,14 @@ import com.agilevolve.domain.model.board.BoardId;
 public interface CardListRepository {
 
     /**
+     * 카드 리스트 id로 카드 리스트 찾기
+     *
+     * @param cardListId 카드 리스트 id
+     * @return 카드 리스트 인스턴스 또는 비어있는 리스트(없을 경우)
+     */
+    CardList findById(CardListId cardListId);
+
+    /**
      * 보드의 카드 리스트들 찾기
      * 
      * @param boardId 보드의 id

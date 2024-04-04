@@ -28,6 +28,7 @@ export interface GetBoardRes {
     id: number,
     name: string,
     position: number,
+    archived: boolean,
     cards: [{
       id: number,
       title: string,
