@@ -284,65 +284,60 @@ const onCardDragEnded = (event: CardDragEvent) => {
             </div>
           </div>
           <div class="board-body">
-            <div class="list-container">
-              <draggable v-model="cardLists" handle=".list-header" :animation=0 :scrollSensitivity=100
-                :touchStartThreshold=20 itemKey="name" @end="onCardListDragEnded">
-                <template #item="{ element }">
-                  <div class="list-wrapper">
-                    <div class="list">
-                      <div class="list-header">{{ element.name }}</div>
-                      <draggable v-model="element.cards" class="cards" group="cards" draggable=".card-item"
-                        ghostClass="ghost-card" :animation=0 :scrollSensitivity=100 :touchStartThreshold=20
-                        itemKey="name" @end="onCardDragEnded" v-bind:data-card-list-id="element.id">
-                        <template #item="{ element }">
-                          <div class="card-item">
-                            <div class="card-title">{{ element.title }}</div>
-                          </div>
-                        </template>
-                      </draggable>
-                      <div class="add-card-button" @click="openAddCardForm(element)" v-show="!element.cardForm.open">+
-                        카드
-                        추가하기
-                      </div>
-                      <div class="add-card-form-wrapper" v-if="element.cardForm.open">
-                        <form @submit.prevent="addCard(element)" class="add-card-form" autocomplete="off">
-                          <div class="form-group">
-                            <textarea ref="focusCardTextArea" class="form-control" v-model="element.cardForm.title"
-                              v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard(element)"
-                              placeholder="카드 제목을 입력해주세요."></textarea>
-                          </div>
-                          <button type="submit" class="btn btn-sm btn-primary">추가</button>
-                          <button type="button" class="btn btn-sm btn-link btn-cancel"
-                            @click="closeAddCardForm(element)">취소</button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template #footer>
-                  <div class="list-wrapper add-list">
-                    <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트
+            <draggable v-model="cardLists" class="list-container" handle=".list-header" :animation=0
+              :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name" @end="onCardListDragEnded">
+              <template #item="{ element }">
+                <div class="list-wrapper">
+                  <div class="list">
+                    <div class="list-header">{{ element.name }}</div>
+                    <draggable v-model="element.cards" class="cards" group="cards" draggable=".card-item"
+                      ghostClass="ghost-card" :animation=0 :scrollSensitivity=100 :touchStartThreshold=20 itemKey="name"
+                      @end="onCardDragEnded" v-bind:data-card-list-id="element.id">
+                      <template #item="{ element }">
+                        <div class="card-item">
+                          <div class="card-title">{{ element.title }}</div>
+                        </div>
+                      </template>
+                    </draggable>
+                    <div class="add-card-button" @click="openAddCardForm(element)" v-show="!element.cardForm.open">+
+                      카드
                       추가하기
                     </div>
-                    <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form"
-                      autocomplete="off">
-                      <div class="form-group">
-                        <input ref="focusListInput" type="text" class="form-control mb-2" v-model="addListForm.name"
-                          id="cardListName" placeholder="이름을 작성해주세요." />
-                      </div>
-                      <button type="submit" class="btn btn-sm btn-primary">추가</button>
-                      <button type="button" class="btn btn-sm btn-link btn-cancel"
-                        @click="closeAddListForm()">취소</button>
-                    </form>
+                    <div class="add-card-form-wrapper" v-if="element.cardForm.open">
+                      <form @submit.prevent="addCard(element)" class="add-card-form" autocomplete="off">
+                        <div class="form-group">
+                          <textarea ref="focusCardTextArea" class="form-control" v-model="element.cardForm.title"
+                            v-bind:id="'cardTitle' + element.id" @keydown.enter.prevent="addCard(element)"
+                            placeholder="카드 제목을 입력해주세요."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary">추가</button>
+                        <button type="button" class="btn btn-sm btn-link btn-cancel"
+                          @click="closeAddCardForm(element)">취소</button>
+                      </form>
+                    </div>
                   </div>
-                </template>
-              </draggable>
-            </div>
+                </div>
+              </template>
+              <template #footer>
+                <div class="list-wrapper add-list">
+                  <div class="add-list-button" @click="openAddListForm()" v-show="!addListForm.open">+ 리스트
+                    추가하기
+                  </div>
+                  <form @submit.prevent="addCardList()" v-show="addListForm.open" class="add-list-form"
+                    autocomplete="off">
+                    <div class="form-group">
+                      <input ref="focusListInput" type="text" class="form-control mb-2" v-model="addListForm.name"
+                        id="cardListName" placeholder="이름을 작성해주세요." />
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">추가</button>
+                    <button type="button" class="btn btn-sm btn-link btn-cancel" @click="closeAddListForm()">취소</button>
+                  </form>
+                </div>
+              </template>
+            </draggable>
           </div>
         </div>
       </div>
-
-
     </div>
     <AddMemberModal :boardId="board.id" @added="onMemberAdded" @close="boardModalClose" ref="memberModalComponent" />
   </div>
