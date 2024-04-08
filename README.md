@@ -53,17 +53,21 @@ spring.mail.password=<your gmail smtp password>
 
 - Spring Boot 3.1.5
 - Vue 3.3.4
-- typescript 5.1.6
-- vite 4.4.9
+- Typescript 5.1.6
+- Vite 4.4.9
 
 ### 구현 기능
+- [사용자 요구 사항](https://blog.naver.com/kimeunje320/223389396838)  
+- [데이터 모델링](https://blog.naver.com/kimeunje320/223387122937)  
+![agilevolve data modeling](https://github.com/kimeunje/AgilEvolve/assets/143335772/735bf090-dffd-4630-b0e2-824539d6f515)  
 
-- [사용자 요구 사항](https://blog.naver.com/kimeunje320/223389396838)
-- [데이터 모델링](https://blog.naver.com/kimeunje320/223387122937)
-- API 설계
-- [백엔드 테스트](https://blog.naver.com/kimeunje320/223387119076), 프런트엔드 테스트
-- [인증, 권한부여](https://blog.naver.com/kimeunje320/223391759916)
-- [클라이언트 데이터 검증](https://blog.naver.com/kimeunje320/223389550943)
+- 아키텍처  
+![agilevolve 아키텍처_700 drawio](https://github.com/kimeunje/AgilEvolve/assets/143335772/8f8f1244-150a-4d4e-86ce-9cc4e905a7c2)  
+- 화면 설계  
+- API 설계  
+- [백엔드 테스트](https://blog.naver.com/kimeunje320/223387119076), 프런트엔드 테스트  
+- [인증, 권한부여](https://blog.naver.com/kimeunje320/223391759916)  
+- [클라이언트 데이터 검증](https://blog.naver.com/kimeunje320/223389550943)  
 
 ### 구현 이미지
 
@@ -97,3 +101,8 @@ spring.mail.password=<your gmail smtp password>
 - 추가된 멤버 확인  
 ![멤버확인](https://github.com/kimeunje/AgilEvolve/assets/143335772/7b86ed55-6954-40c9-aba0-827678851186)
 
+### 개선 사항
+- 카드 페이지 설계 및 기능 구현
+- 실시간 화면 공유
+- 메시지 기반 비동기 처리
+- CI/CD 자동화
