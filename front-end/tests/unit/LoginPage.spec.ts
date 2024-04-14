@@ -47,8 +47,8 @@ describe('LoginPage', () => {
   it('로그인 폼을 렌더링해야 합니다.', async () => {
     expect(wrapper.find('.logo').attributes().src).toEqual('/images/logo.png')
     expect(wrapper.find('.tagline').text()).toEqual('logo.tagLine')
-    expect((fieldUsername.element as HTMLInputElement).value).toEqual('test')
-    expect((fieldPassword.element as HTMLInputElement).value).toEqual('test1234')
+    expect((fieldUsername.element as HTMLInputElement).value).toEqual('agilevolve')
+    expect((fieldPassword.element as HTMLInputElement).value).toEqual('Project2024$')
     expect(buttonSubmit.text()).toEqual('loginPage.form.submit')
     expect(wrapper.find('.link-sign-up').attributes().to).toEqual('/register')
     expect(wrapper.find('.link-forgot-password')).toBeTruthy()
@@ -57,8 +57,8 @@ describe('LoginPage', () => {
   it('초깃값을 갖는 데이터 모델을 포함해야 합니다.', () => {
     const loginData = wrapper.vm
 
-    expect(loginData.form.username).toEqual('test')
-    expect(loginData.form.password).toEqual('test1234')
+    expect(loginData.form.username).toEqual('agilevolve')
+    expect(loginData.form.password).toEqual('Project2024$')
   })
 
   it('데이터 모델과 연결된 폼 입력을 가져야 합니다.', async () => {
@@ -117,27 +117,22 @@ describe('LoginPage', () => {
   it('유효하지 않은 데이터 제출을 방지하기 위한 검증이 존재해야 합니다.', () => {
     const loginData = wrapper.vm
 
-    /**
-     * 필드에 임시 값을 넣어둔 상태라서 임시로 막아둠
-     */
-
-    // wrapper.vm.submitForm()
-    // expect(authenticateSpy).not.toHaveBeenCalled()
-
     // 사용자명만 유효합니다.
-    // loginData.form.username = 'sunny'
-    // wrapper.vm.submitForm()
-    // expect(authenticateSpy).not.toHaveBeenCalled()
+    loginData.form.username = 'sunny'
+    loginData.form.password = ''
+    wrapper.vm.submitForm()
+    expect(authenticateSpy).not.toHaveBeenCalled()
 
     // 이메일만 유효합니다.
-    // loginData.form.username = 'sunny@agilevolve.com'
-    // wrapper.vm.submitForm()
-    // expect(authenticateSpy).not.toHaveBeenCalled()
+    loginData.form.username = 'sunny@agilevolve.com'
+    loginData.form.password = ''
+    wrapper.vm.submitForm()
+    expect(authenticateSpy).not.toHaveBeenCalled()
 
     // 비밀번호만 유효합니다.
-    // loginData.form.password = 'MyPassword123!'
-    // loginData.form.username = ''
-    // wrapper.vm.submitForm()
-    // expect(authenticateSpy).not.toHaveBeenCalled()
+    loginData.form.password = 'MyPassword123!'
+    loginData.form.username = ''
+    wrapper.vm.submitForm()
+    expect(authenticateSpy).not.toHaveBeenCalled()
   })
 })

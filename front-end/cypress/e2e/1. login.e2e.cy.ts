@@ -16,6 +16,8 @@ describe('Login Page', () => {
 
   it('유효하지 않은 자격으로 로그인 시도', () => {
     loginPage.visit()
+    cy.get('#username').focus().clear();
+    cy.get('#password').focus().clear();
     cy.login('not-exist', 'badPassword')
 
     cy.wait(500)
@@ -23,23 +25,28 @@ describe('Login Page', () => {
     loginPage.elements.getFormError().should('have.text', '유효하지 않은 자격입니다.')
   })
 
-  // it('유효한 아이디로 로그인 시도', () => {
-  //   cy.fixture('user.json').then((user) => {
-  //     loginPage.visit()
-  //     cy.login(user.username, user.password)
+  it('유효한 아이디로 로그인 시도', () => {
 
-  //     cy.wait(500)
-  //     homePage.elements.getLogoImage().should('be.visible')
-  //   })
-  // })
+    cy.fixture('user.json').then((user) => {
+      loginPage.visit()
+      cy.get('#username').focus().clear();
+      cy.get('#password').focus().clear();
+      cy.login(user.username, user.password)
 
-  // it('유효한 이메일로 로그인 시도', () => {
-  //   cy.fixture('user.json').then((user) => {
-  //     loginPage.visit()
-  //     cy.login(user.emailAddress, user.password)
+      cy.wait(500)
+      homePage.elements.getLogoImage().should('be.visible')
+    })
+  })
 
-  //     cy.wait(500)
-  //     homePage.elements.getLogoImage().should('be.visible')
-  //   })
-  // })
+  it('유효한 이메일로 로그인 시도', () => {
+    cy.fixture('user.json').then((user) => {
+      loginPage.visit()
+      cy.get('#username').focus().clear();
+      cy.get('#password').focus().clear();
+      cy.login(user.emailAddress, user.password)
+
+      cy.wait(500)
+      homePage.elements.getLogoImage().should('be.visible')
+    })
+  })
 })

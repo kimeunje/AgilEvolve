@@ -27,13 +27,13 @@ describe('Register Page', () => {
     })
   })
 
-  // it('유효한 데이터로 회원가입 시도', () => {
-  //   cy.fixture('user.json').then((user) => {
-  //     registerPage.visit()
-  //     cy.register(user.username, user.emailAddress, user.password)
+  it('유효한 데이터로 회원가입 시도', () => {
+    cy.fixture('user.json').then((user) => {
+      registerPage.visit()
+      cy.register(user.username, user.emailAddress, user.password)
 
-  //     cy.wait(3000)
-  //     cy.url().should('eq', Cypress.config().baseUrl + '/login')
-  //   })
-  // })
+      cy.wait(3000)
+      cy.url().should('eq', Cypress.config().baseUrl + '/login')
+    })
+  })
 })

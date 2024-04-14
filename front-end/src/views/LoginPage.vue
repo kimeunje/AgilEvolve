@@ -59,8 +59,8 @@ export default {
     const { t } = useI18n()
 
     const form = ref({
-      username: 'test',
-      password: 'test1234'
+      username: 'agilevolve',
+      password: 'Project2024$'
     })
 
     const errorMessage = ref('')

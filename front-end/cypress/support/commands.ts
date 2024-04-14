@@ -31,7 +31,7 @@ Cypress.Commands.add('generateRandomUser', () => {
     lastName: chance.last(),
     username: chance.first().toLowerCase() + chance.integer({ min: 0, max: 1000000 }),
     emailAddress: chance.email(),
-    password: 'test1234'
+    password: 'test1234!'
   }
 
   const filePath = 'cypress/fixtures/user.json'
